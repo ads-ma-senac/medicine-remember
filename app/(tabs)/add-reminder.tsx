@@ -5,15 +5,15 @@ import { StyleSheet, View } from "react-native";
 import { Button, Text, useTheme } from "react-native-paper";
 
 import FormInput from "@/components/Form/FormInput";
-import FormPicker from "@/components/Form/FormPicker";
-import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
-import { router } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-
 import FormNumericInput from "@/components/Form/FormNumericInput";
+import FormPicker from "@/components/Form/FormPicker";
+import { images } from "@/constants/images";
 import { useReminders } from "@/hooks/useReminders";
 import { frequencyOptions, FrequencyValue } from "@/types/Frequency";
+import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddReminder() {
     const theme = useTheme();
@@ -25,6 +25,8 @@ export default function AddReminder() {
     const [frequency, setFrequency] = useState<FrequencyValue>("1d");
     const [startTime, setStartTime] = useState<Date | undefined>(undefined);
     const [endTime, setEndTime] = useState<Date | undefined>(undefined);
+
+
 
     const handleSave = async () => {
         const UUID = Crypto.randomUUID();
@@ -48,12 +50,15 @@ export default function AddReminder() {
 
     return (
         <SafeAreaView
-            style={[{flex: 1}, {backgroundColor: theme.colors.background}]}
+            style={[{ flex: 1 }, { backgroundColor: theme.colors.background }]}
         >
             <View style={styles.container}>
+                <View style={{ width: "100%",height:138,alignItems: "center",justifyContent: "center" }}>
+                    <Image source={images.pill3d} priority={"high"} style={styles.imageContent} />
+                </View>
                 <Text style={styles.title}>Novo medicamento</Text>
                 <View style={styles.formContainer}>
-                    <FormInput label="Nome" value={name} onChangeText={setName}/>
+                    <FormInput label="Nome" value={name} onChangeText={setName} />
                     <FormPicker
                         label="Tipo de medicação"
                         value={type}
@@ -77,12 +82,12 @@ export default function AddReminder() {
                         mode="contained"
                         style={[
                             styles.formButton,
-                            {backgroundColor: theme.colors.tertiaryContainer},
+                            { backgroundColor: theme.colors.tertiaryContainer },
                         ]}
                         onPress={handleSave}
                     >
                         <Text
-                            style={[styles.formButtonLabel, {color: theme.colors.tertiary}]}
+                            style={[styles.formButtonLabel, { color: theme.colors.tertiary }]}
                         >
                             Adicionar medicamento
                         </Text>
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
         gap: 24,
     },
     title: {
-        fontSize: 32,
+        fontSize: 24,
         fontWeight: "bold",
     },
     formButton: {
@@ -121,4 +126,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
     },
+    imageContent: 
+        {
+            maxWidth: 92,
+            width:"100%",
+            height: 86,
+            flex: 1,
+        },
 });
