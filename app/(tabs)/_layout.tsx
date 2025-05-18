@@ -58,7 +58,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="addReminder"
+        name="add-reminder"
         options={{
           title: "Novo lembrete",
           tabBarIcon: ({ color, focused }) => (

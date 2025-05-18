@@ -4,16 +4,16 @@ import ActionCard from "@/components/ActionCard";
 import ActionsSection from "@/components/ActionsSection";
 import NextDoseInfo from "@/components/NextDoseInfo";
 import ReminderSection from "@/components/ReminderSection";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useReminders } from "@/hooks/useReminders";
+import { router } from "expo-router";
 import { useTheme } from "react-native-paper";
-import {useReminders} from "@/hooks/UseReminders";
-import {router} from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   const theme = useTheme();
-  const { reminders } = useReminders();
+  const { getLastActiveReminders } = useReminders();
 
-  const activeRemindersPreview = reminders.filter( r => !r.active).slice(0,5);
+  const lastActiveReminders = getLastActiveReminders();
 
   return (
     <SafeAreaView
@@ -24,10 +24,10 @@ export default function Index() {
         <ActionsSection>
           <ActionCard icon="history" label="Histórico" onPress={() => router.push("/history")} />
           <ActionCard icon="pill" label="Lembretes" onPress={() => router.push("/reminders")} />
-          <ActionCard icon="plus-circle" label="Novo lembrete" onPress={() => router.push("/addReminder")} />
+          <ActionCard icon="plus-circle" label="Novo lembrete" onPress={() => router.push("/add-reminder")} />
           <ActionCard icon="eye" label="Ver todos" />
         </ActionsSection>
-        <ReminderSection title={"Medicamentos"} reminders={activeRemindersPreview} />
+        <ReminderSection title={"Medicamentos"} reminders={lastActiveReminders} />
       </View>
     </SafeAreaView>
   );

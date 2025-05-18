@@ -1,28 +1,30 @@
 import * as Crypto from "expo-crypto";
 
-import {Button, Text, useTheme} from "react-native-paper";
-import React, {useState} from "react";
-import {StyleSheet, View} from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Button, Text, useTheme } from "react-native-paper";
 
 import FormInput from "@/components/Form/FormInput";
 import FormPicker from "@/components/Form/FormPicker";
-import {Reminder, ReminderType, typesMedicine} from "@/types/Reminder";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {router} from "expo-router";
+import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
+import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import {useReminders} from "@/hooks/UseReminders";
 
-import {frequencyOptions, FrequencyValue} from "@/types/Frequency";
 import FormNumericInput from "@/components/Form/FormNumericInput";
+import { useReminders } from "@/hooks/useReminders";
+import { frequencyOptions, FrequencyValue } from "@/types/Frequency";
 
 export default function AddReminder() {
     const theme = useTheme();
-    const {addReminderHandler} = useReminders();
+    const { addReminder } = useReminders();
 
     const [name, setName] = useState("");
     const [type, setType] = useState<ReminderType>("pill");
     const [dosage, setDosage] = useState<number>(1);
     const [frequency, setFrequency] = useState<FrequencyValue>("1d");
+    const [startTime, setStartTime] = useState<Date | undefined>(undefined);
+    const [endTime, setEndTime] = useState<Date | undefined>(undefined);
 
     const handleSave = async () => {
         const UUID = Crypto.randomUUID();
@@ -33,10 +35,14 @@ export default function AddReminder() {
             type,
             dosage,
             frequency,
-            active: true
+            active: true,
+            startTime,
+            endTime,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         };
 
-        addReminderHandler(reminder);
+        addReminder(reminder);
         router.replace("/");
     };
 
