@@ -36,6 +36,19 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "48da00d9-e110-4b83-bbe1-6a41039f63e3"
+      }
+    },
+    "owner": "ejunior01",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/48da00d9-e110-4b83-bbe1-6a41039f63e3"
     }
   }
 }
