@@ -1,13 +1,13 @@
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
 
-import { Colors } from "@/constants/Colors";
-import { MD3DarkTheme } from "react-native-paper";
-import { RemindersProvider } from "@/context/RemindersContext";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Colors } from "@/constants/colors";
+import { AppProvider } from "@/context/AppContext";
+import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
-import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
+import { MD3DarkTheme } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -21,14 +21,14 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <PaperProvider theme={paperTheme}>
-        <RemindersProvider>
+        <AppProvider>
           <Stack
             screenOptions={{
               headerShown: false,
             }}
           />
           <StatusBar style="auto" />
-        </RemindersProvider>
+        </AppProvider>
       </PaperProvider>
     </SafeAreaProvider>
   );

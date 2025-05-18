@@ -1,10 +1,10 @@
-import {StyleSheet, View} from "react-native";
-import {capitalizeFirstLetter} from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import { StyleSheet, View } from "react-native";
 
+import { useLiveNextDose } from "@/hooks/useLiveNextDose";
+import { dateUtils } from "@/lib/dateUtils";
 import React from "react";
-import {Text} from "react-native-paper";
-import {dateUtils} from "@/lib/dateUtils";
-import {useLiveNextDose} from "@/hooks/UseLiveNextDose";
+import { Text } from "react-native-paper";
 
 export default function NextDoseInfo() {
   const nextDose = useLiveNextDose();

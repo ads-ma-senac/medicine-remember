@@ -1,19 +1,20 @@
-import {StyleSheet, View} from "react-native";
-import {Text, useTheme} from "react-native-paper";
-import {capitalizeFirstLetter} from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import { StyleSheet, View } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 
-import {Image} from "expo-image";
-import {Reminder} from "@/types/Reminder";
-import {reminderTypeToImage} from "@/constants/ReminderImages";
-import {dateUtils} from "@/lib/dateUtils";
-import {useNextDose} from "@/hooks/UseNextDose";
+import { dateUtils } from "@/lib/dateUtils";
+import { Reminder, reminderTypeToImage } from "@/types/Reminder";
+import { Image } from "expo-image";
 
-import {frequencyOptions} from "@/types/Frequency";
-import {dosaFormat} from "@/lib/doseUtils";
+import { useDoses } from "@/hooks/useDoses";
+import { dosaFormat } from "@/lib/doseUtils";
+import { frequencyOptions } from "@/types/Frequency";
 
 export default function ReminderCard({reminder}: { reminder: Reminder }) {
     const theme = useTheme();
-    const nextDose = useNextDose(reminder.id);
+    const { getNextDose } = useDoses();
+
+    const nextDose = getNextDose(reminder.id);
 
     const frequencyLabel = frequencyOptions.find(f =>
         f.value === reminder.frequency)?.label ?? "-"
