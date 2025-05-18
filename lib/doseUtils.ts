@@ -1,15 +1,9 @@
-import {Dose} from "@/types/Dose";
+import { dateUtils } from "@/lib/dateUtils";
+import { Dose } from "@/types/Dose";
+import { frequencyToHours, FrequencyValue } from "@/types/Frequency";
+import { Reminder, ReminderType } from "@/types/Reminder";
 import * as Crypto from "expo-crypto";
-import {dateUtils} from "@/lib/dateUtils";
-import {frequencyToHours, FrequencyValue} from "@/types/Frequency";
-import {Reminder, ReminderType} from "@/types/Reminder";
 
-export function getNextDose(doses: Dose[]): Dose | null {
-
-    return doses
-        .filter((dose) => dateUtils.isAfterNow(dose.datetime) && !dose.taken)
-        .sort((a, b) => dateUtils.compareAsc(a.datetime, b.datetime))[0];
-}
 
 export function dosaFormat(reminder: Reminder) {
     const suffix: Record<ReminderType, string> = {
