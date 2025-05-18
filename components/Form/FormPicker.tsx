@@ -33,7 +33,6 @@ export default function FormPicker({
         <Picker
             selectedValue={value}
             onValueChange={onChange}
-            selectionColor={theme.colors.onSurface}
             style={[
               styles.picker,
               {

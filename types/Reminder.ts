@@ -1,3 +1,5 @@
+import { icons } from "@/constants/icons";
+
 export type ReminderType = "capsule" | "pill" | "syrup" | "injection";
 
 export type Reminder = {
@@ -9,6 +11,8 @@ export type Reminder = {
   startTime?: Date;
   endTime?: Date;
   active?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type MedicineTypeOption = {
@@ -22,3 +26,10 @@ export const typesMedicine: MedicineTypeOption[] = [
   { label: 'Xarope', value: 'syrup' },
   { label: 'Injeção', value: 'injection' },
 ];
+
+export const reminderTypeToImage: Record<ReminderType, any> = {
+  pill: icons.pill,
+  capsule: icons.capsule,
+  syrup: icons.syrup,
+  injection: icons.injection,
+};
