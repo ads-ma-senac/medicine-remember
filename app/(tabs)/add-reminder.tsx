@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, useTheme } from "react-native-paper";
 
-import DateTimeInput from "@/components/Form/DateTimeInput";
 
 import FormInput from "@/components/Form/FormInput";
 import FormNumericInput from "@/components/Form/FormNumericInput";
@@ -107,8 +106,8 @@ export default function AddReminder() {
                         onChange={setFrequency}
                         options={frequencyOptions}
                     />
-                    <DateTimeInput label="Data de início" onChange={onChange} value={new Date()}/>
-                    <DateTimeInput label="Data de termino" onChange={onChange} value={new Date() } minimumDate={new Date()}/>
+                    {/* <DateTimeInput label="Data de início" onChange={onChange} value={new Date()}/> */}
+                    {/* <DateTimeInput label="Data de termino" onChange={onChange} value={new Date() } minimumDate={new Date()}/> */}
                 </View>
                 <View>
                     <View style={{ flexDirection: "row" }}>
