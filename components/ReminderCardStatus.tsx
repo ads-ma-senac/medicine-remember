@@ -2,20 +2,15 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
-import { dateUtils } from "@/lib/dateUtils";
 import { Reminder, reminderTypeToImage } from "@/types/Reminder";
 import { Image } from "expo-image";
 
-import { useDoses } from "@/hooks/useDoses";
 import { dosaFormat } from "@/lib/doseUtils";
 import { frequencyOptions } from "@/types/Frequency";
 import { router } from "expo-router";
 
-export default function ReminderCard({reminder}: { reminder: Reminder }) {
+export default function ReminderCardStatus({ reminder }: { reminder: Reminder }) {
     const theme = useTheme();
-    const { getNextDose } = useDoses();
-
-    const nextDose = getNextDose(reminder.id);
 
     const frequencyLabel = frequencyOptions.find(f =>
         f.value === reminder.frequency)?.label ?? "-"
@@ -30,31 +25,26 @@ export default function ReminderCard({reminder}: { reminder: Reminder }) {
         <TouchableOpacity
             style={[
                 styles.cardContainer,
-                {backgroundColor: theme.colors.primaryContainer},
+                { backgroundColor: theme.colors.primaryContainer },
             ]}
             onPress={handlePress}
         >
-            <View style={{width: 40, height: 40}}>
-                <Image style={styles.image} source={imageSource}/>
+            <View style={{ width: 52, height: 52 }}>
+                <Image style={styles.image} source={imageSource} />
             </View>
             <View style={styles.cardDetailsContainer}>
                 <View style={styles.cardDetails}>
                     <Text style={[styles.cardTitle]}>
                         {capitalizeFirstLetter(reminder.name)}
                     </Text>
-                    <Text style={styles.cardText}>
-                        {nextDose
-                            ? capitalizeFirstLetter(
-                                dateUtils.formatDistance(nextDose.datetime)
-                            )
-                            : ""}
-                    </Text>
                 </View>
                 <View style={styles.cardDetails}>
                     <Text style={[styles.cardText]}>
                         {dosaFormat(reminder)}
                     </Text>
-                    <Text style={styles.cardText}>{frequencyLabel}</Text>
+                    <View style={[styles.badge, { backgroundColor: theme.colors.onSecondaryContainer }]} >
+                        <Text style={[styles.cardText, { color: theme.colors.onSecondary }]}>{reminder.active ? "Ativo" : "Pausado"}</Text>
+                    </View>
                 </View>
             </View>
         </TouchableOpacity>
@@ -87,11 +77,23 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     cardText: {
-        fontSize: 14,
+        fontSize: 16,
     },
     image: {
         flex: 1,
-        width: 40,
-        height: 40,
+        width: 52,
+        height: 52,
     },
+    badge: {
+        padding: 4,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        borderRadius: 8,
+        gap: 4,
+        minWidth: 64,
+        maxWidth: 128,
+        height: 32,
+        fontWeight: "bold",
+    }
 });

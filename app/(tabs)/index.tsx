@@ -23,11 +23,11 @@ export default function Index() {
         <NextDoseInfo />
         <ActionsSection>
           <ActionCard icon="history" label="Histórico" onPress={() => router.push("/history")} />
-          <ActionCard icon="pill" label="Lembretes" onPress={() => router.push("/reminders")} />
+          <ActionCard icon="pill" label="Lembretes" onPress={() => router.push("/(tabs)/reminders")} />
           <ActionCard icon="plus-circle" label="Novo lembrete" onPress={() => router.push("/add-reminder")} />
           <ActionCard icon="eye" label="Ver todos" />
         </ActionsSection>
-        <ReminderSection title={"Medicamentos"} reminders={lastActiveReminders} />
+        <ReminderSection title={"Últimos lembretes cadastrados"} reminders={lastActiveReminders} />
       </View>
     </SafeAreaView>
   );

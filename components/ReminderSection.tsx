@@ -1,9 +1,9 @@
 import { FlatList, StyleSheet, View } from "react-native";
 
-import React from "react";
 import { Reminder } from "@/types/Reminder";
-import ReminderCard from "./ReminderCard";
+import React from "react";
 import { Text } from "react-native-paper";
+import ReminderCard from "./ReminderCard";
 
 type ReminderSectionProps = {
   title: string;
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 12,
   },

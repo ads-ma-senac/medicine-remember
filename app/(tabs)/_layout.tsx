@@ -44,7 +44,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="reminders"
+        name="[reminders]/index"
         options={{
           title: "Lembretes",
           tabBarIcon: ({ color, focused }) => (
@@ -86,17 +86,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="[reminders]/[id]"
         options={{
-          title: "Perfil",
-          tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons
-              name={focused ? "account" : "account-outline"}
-              size={iconSize}
-              color={color}
-              style={{ marginBottom: -4 }}
-            />
-          ),
+          href: null
         }}
       />
     </Tabs>
