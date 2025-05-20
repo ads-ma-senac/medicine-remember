@@ -1,7 +1,7 @@
 import * as Crypto from "expo-crypto";
 
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, Text, useTheme } from "react-native-paper";
 
 
@@ -30,7 +30,7 @@ export default function AddReminder() {
     const clearForm = () => {
         setName("");
         setType("pill");
-        setDosage(1);
+        setDosage(undefined);
         setFrequency("1d");
         setStartTime(undefined);
         setEndTime(undefined);
@@ -83,55 +83,60 @@ export default function AddReminder() {
         <SafeAreaView
             style={[{ flex: 1 }, { backgroundColor: theme.colors.background }]}
         >
-            <View style={styles.container}>
-                <Text style={styles.title}>Novo medicamento</Text>
-                <View style={styles.formContainer}>
-                    <FormInput label="Nome" value={name} onChangeText={setName} />
-                    <FormPicker
-                        label="Tipo de medicação"
-                        value={type}
-                        onChange={setType}
-                        options={typesMedicine}
-                    />
-                    <FormNumericInput
-                        label="Quantidade por dose"
-                        value={dosage}
-                        keyboardType="numeric"
-                        onChangeNumber={setDosage}
-                    />
-                    <FormPicker
-                        label="Frequência"
-                        value={frequency}
-                        onChange={setFrequency}
-                        options={frequencyOptions}
-                    />
-                    {/* <DateTimeInput label="Data de início" onChange={onChange} value={new Date()}/> */}
-                    {/* <DateTimeInput label="Data de termino" onChange={onChange} value={new Date() } minimumDate={new Date()}/> */}
-                </View>
-                <View>
-                    <View style={{ flexDirection: "row" }}>
-                        {
-                            message && <Text style={[styles.errorMessage, { color: theme.colors.error }]}>
-                                ️⚠️ {message}
-                            </Text>
-                        }
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={{ flex: 1 }}
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>Novo medicamento</Text>
+                    <View style={styles.formContainer}>
+                        <FormInput label="Nome" value={name} onChangeText={setName} />
+                        <FormPicker
+                            label="Tipo de medicação"
+                            value={type}
+                            onChange={setType}
+                            options={typesMedicine}
+                        />
+                        <FormNumericInput
+                            label="Quantidade por dose"
+                            value={dosage}
+                            keyboardType="numeric"
+                            onChangeNumber={setDosage}
+                        />
+                        <FormPicker
+                            label="Frequência"
+                            value={frequency}
+                            onChange={setFrequency}
+                            options={frequencyOptions}
+                        />
+                        {/* <DateTimeInput label="Data de início" onChange={onChange} value={new Date()}/> */}
+                        {/* <DateTimeInput label="Data de termino" onChange={onChange} value={new Date() } minimumDate={new Date()}/> */}
                     </View>
-                    <Button
-                        mode="contained"
-                        style={[
-                            styles.formButton,
-                            { backgroundColor: theme.colors.tertiaryContainer },
-                        ]}
-                        onPress={handleSave}
-                    >
-                        <Text
-                            style={[styles.formButtonLabel, { color: theme.colors.tertiary }]}
+                    <View>
+                        <View style={{ flexDirection: "row" }}>
+                            {
+                                message && <Text style={[styles.errorMessage, { color: theme.colors.error }]}>
+                                    ️⚠️ {message}
+                                </Text>
+                            }
+                        </View>
+                        <Button
+                            mode="contained"
+                            style={[
+                                styles.formButton,
+                                { backgroundColor: theme.colors.onSurfaceVariant },
+                            ]}
+                            onPress={handleSave}
                         >
-                            Adicionar medicamento
-                        </Text>
-                    </Button>
+                            <Text
+                                style={[styles.formButtonLabel, { color: theme.colors.surface }]}
+                            >
+                                Adicionar medicamento
+                            </Text>
+                        </Button>
+                    </View>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         flexDirection: "column",
-        gap: 16,
+        gap: 12,
     },
     title: {
         fontSize: 24,
