@@ -27,7 +27,7 @@ export default function FormInput({
         onChangeText={onChangeText}
         style={[
           styles.input,
-          { backgroundColor: theme.colors.primaryContainer  },
+          { backgroundColor: theme.colors.primaryContainer },
         ]}
         {...rest}
       />
@@ -37,7 +37,7 @@ export default function FormInput({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 8,
+    gap: 4,
   },
   label: {
     fontSize: 18,
