@@ -44,7 +44,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="[reminders]/index"
+        name="reminders/index"
         options={{
           title: "Lembretes",
           tabBarIcon: ({ color, focused }) => (
@@ -86,7 +86,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="[reminders]/[id]"
+        name="reminders/[reminderId]/index"
         options={{
           href: null
         }}

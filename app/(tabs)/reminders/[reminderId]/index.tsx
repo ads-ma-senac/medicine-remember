@@ -11,10 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ReminderDetailsById() {
     const theme = useTheme();
-    const { id } = useLocalSearchParams();
+    const { reminderId } = useLocalSearchParams();
     const { getReminderById } = useReminders();
-    
-    const reminder = getReminderById(id as string);
+
+    const reminder = getReminderById(reminderId as string);
 
     return (
         <SafeAreaView
@@ -39,5 +39,5 @@ const styles = StyleSheet.create({
         paddingRight: 24,
         flexDirection: "column",
     },
-  
+
 });
