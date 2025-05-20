@@ -1,11 +1,10 @@
-// hooks/useDoses.ts
 import { useAppContext } from "@/context/AppContext";
 import { dateUtils } from "@/lib/dateUtils";
 import { Dose } from "@/types/Dose";
 
 export const useDoses = () => {
   const { doses = [] } = useAppContext();
-  
+
   const upcomingDoses24h = doses.filter((dose) =>
     dateUtils.isWithinNextHours(dose.datetime, 24)
   );
