@@ -21,7 +21,7 @@ export default function AddReminder() {
 
     const [name, setName] = useState("");
     const [type, setType] = useState<ReminderType>("pill");
-    const [dosage, setDosage] = useState<number>(1);
+    const [dosage, setDosage] = useState<number>();
     const [frequency, setFrequency] = useState<FrequencyValue>("1d");
     const [startTime, setStartTime] = useState<Date | undefined>(undefined);
     const [endTime, setEndTime] = useState<Date | undefined>(undefined);
@@ -97,7 +97,6 @@ export default function AddReminder() {
                         label="Quantidade por dose"
                         value={dosage}
                         keyboardType="numeric"
-                        min={1}
                         onChangeNumber={setDosage}
                     />
                     <FormPicker
