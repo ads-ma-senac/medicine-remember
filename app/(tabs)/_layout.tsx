@@ -86,9 +86,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="reminders/[reminderId]/index"
+        name="reminders/[id]/index"
         options={{
-          href: null
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="reminders/[id]/editar"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

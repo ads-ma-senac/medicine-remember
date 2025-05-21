@@ -12,22 +12,30 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import FormField from "@/components/Form/InputField";
 import FormPicker from "@/components/Form/PickerField";
 import NumericInputField from "@/components/Form/NumericInputField";
-import { router } from "expo-router";
 import { useReminders } from "@/hooks/useReminders";
 
-export default function AddReminder() {
+export default function EditReminder() {
   const theme = useTheme();
-  const { addReminder } = useReminders();
+  const { getReminderById } = useReminders();
 
-  const [name, setName] = useState("");
-  const [type, setType] = useState<ReminderType>("pill");
-  const [dosage, setDosage] = useState<number>();
-  const [frequency, setFrequency] = useState<FrequencyValue>("1d");
+  const { id } = useLocalSearchParams();
+
+  const reminder = getReminderById(id as string);
+
+  const [name, setName] = useState(reminder?.name as string);
+  const [type, setType] = useState<ReminderType>(
+    reminder?.type as ReminderType
+  );
+  const [dosage, setDosage] = useState<number>(reminder?.dosage as number);
+  const [frequency, setFrequency] = useState<FrequencyValue>(
+    reminder?.frequency as FrequencyValue
+  );
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<Date | undefined>(undefined);
   const [message, setMessage] = useState<string | undefined>("");
@@ -38,24 +46,10 @@ export default function AddReminder() {
   const clearForm = () => {
     setName("");
     setType("pill");
-    setDosage(undefined);
+    setDosage(0);
     setFrequency("1d");
     setStartTime("");
     setEndTime(undefined);
-  };
-
-  const onChange = ({ type }: any, selectedDate?: any) => {
-    if (type === "set") {
-      const currentDate = selectedDate;
-      setDate(currentDate);
-
-      if (Platform.OS === "android") {
-        toggleDatepicker();
-        setStartTime(currentDate);
-      }
-    } else {
-      toggleDatepicker();
-    }
   };
 
   const handleSave = async () => {
@@ -70,11 +64,6 @@ export default function AddReminder() {
       setMessage("A data de término não pode ser menor que a data atual");
       return;
     }
-
-    // if (startTime && endTime && startTime.getTime() > endTime.getTime()) {
-    //   setMessage("A data de início não pode ser maior que a data de término");
-    //   return;
-    // }
 
     setMessage("");
 
@@ -91,14 +80,10 @@ export default function AddReminder() {
       updatedAt: new Date(),
     };
 
-    addReminder(reminder);
     clearForm();
     router.push("/");
   };
 
-  const toggleDatepicker = () => {
-    setShowPicker(!showPicker);
-  };
   return (
     <DefaultScreen>
       <KeyboardAvoidingView
@@ -153,7 +138,7 @@ export default function AddReminder() {
                     { color: theme.colors.surface },
                   ]}
                 >
-                  Adicionar medicamento
+                  Atualizar medicamento
                 </Text>
               </Button>
             </View>

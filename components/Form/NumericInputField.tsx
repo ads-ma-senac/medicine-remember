@@ -3,28 +3,47 @@ import { Text, TextInput, TextInputProps, useTheme } from "react-native-paper";
 
 import React from "react";
 
-type FormInputProps = {
+type NumericInputFieldProps = {
   label: string;
-  value: string;
-  onChangeText: (value: string) => void;
-} & TextInputProps;
+  value: number | undefined;
+  onChangeNumber: (value: number) => void;
+  min?: number;
+  max?: number;
+} & Omit<TextInputProps, "value" | "onChangeText">;
 
-export default function FormInput({
+export default function NumericInputField({
   label,
   value,
-  onChangeText,
+  onChangeNumber,
+  min,
+  max,
   ...rest
-}: FormInputProps) {
+}: NumericInputFieldProps) {
   const theme = useTheme();
+
+  const handleChange = (text: string) => {
+    const num = Number(text);
+
+    if (!isNaN(num)) {
+      if (
+        (min === undefined || num >= min) &&
+        (max === undefined || num <= max)
+      ) {
+        onChangeNumber(num);
+      }
+    } else if (text === "") {
+      onChangeNumber(0);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
       <TextInput
-        value={value}
+        value={value?.toString() ?? ""}
         mode="outlined"
         outlineColor="transparent"
-        onChangeText={onChangeText}
+        onChangeText={handleChange}
         style={[
           styles.input,
           { backgroundColor: theme.colors.primaryContainer },
@@ -37,7 +56,7 @@ export default function FormInput({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 4,
+    gap: 8,
   },
   label: {
     fontSize: 18,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Switch, Text, useTheme } from "react-native-paper";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import { Image } from "expo-image";
@@ -11,32 +12,41 @@ import { dosaFormat } from "@/lib/doseUtils";
 import { frequencyOptions } from "@/types/Frequency";
 import { reminderTypeToImage } from "@/types/Reminder";
 import { useDoses } from "@/hooks/useDoses";
-import { useLocalSearchParams } from "expo-router";
 import { useReminders } from "@/hooks/useReminders";
 
 export default function ReminderDetailsById() {
   const theme = useTheme();
+  const { id } = useLocalSearchParams();
   const { getNextDose } = useDoses();
+  const { getReminderById, deleteReminder, disabledReminderById } =
+    useReminders();
 
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const reminder = getReminderById(id as string);
+  const nextDose = getNextDose(reminder?.id);
+
   const [colorCircularIdentifier, setColorCircularIdentifier] =
     useState("#05df72");
+
+  const [isSwitchOn, setIsSwitchOn] = useState(reminder?.active ?? false);
 
   const onToggleSwitch = () => {
     setColorCircularIdentifier(!isSwitchOn ? "#05df72" : "#939393");
     setIsSwitchOn(!isSwitchOn);
+
+    if (reminder) disabledReminderById(reminder?.id);
   };
-
-  const { reminderId } = useLocalSearchParams();
-  const { getReminderById } = useReminders();
-
-  const reminder = getReminderById(reminderId as string);
-  const nextDose = getNextDose(reminder?.id);
 
   const frequencyLabel =
     frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
 
   const imageSource = reminder ? reminderTypeToImage[reminder.type] : null;
+
+  const handleDelete = () => {
+    if (reminder) {
+      deleteReminder(reminder?.id);
+      router.navigate("/reminders");
+    }
+  };
 
   return (
     <DefaultScreen>
@@ -87,6 +97,9 @@ export default function ReminderDetailsById() {
                       alignItems: "center",
                     },
                   ]}
+                  onPress={() => {
+                    router.push(`/reminders/${id}/editar`);
+                  }}
                 >
                   <MaterialCommunityIcons
                     name={"pencil-outline"}
@@ -176,6 +189,7 @@ export default function ReminderDetailsById() {
                       alignItems: "center",
                     },
                   ]}
+                  onPress={handleDelete}
                 >
                   <MaterialCommunityIcons
                     name={"trash-can-outline"}
@@ -244,7 +258,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingLeft: 16,
     width: "100%",
-    height: 56,
+    height: 68,
     gap: 8,
   },
   buttonText: {
