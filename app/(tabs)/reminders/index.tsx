@@ -1,18 +1,17 @@
-import ReminderCardStatus from "@/components/ReminderCardStatus";
-import { useReminders } from "@/hooks/useReminders";
-import { FlatList, SafeAreaView, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
+import { DefaultScreen } from "@/components/DefaultScreen";
+import ReminderCardStatus from "@/components/ReminderCardStatus";
+import { useReminders } from "@/hooks/useReminders";
+
 export default function Reminders() {
-  
   const theme = useTheme();
   const { getAllReminders } = useReminders();
   const allReminders = getAllReminders();
 
   return (
-    <SafeAreaView
-      style={[{ flex: 1 }, { backgroundColor: theme.colors.background }]}
-    >
+    <DefaultScreen>
       <View style={styles.container}>
         <Text style={styles.title}>Visão geral</Text>
         <View style={styles.section}>
@@ -25,11 +24,9 @@ export default function Reminders() {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </DefaultScreen>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -41,8 +38,8 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     flexDirection: "column",
   },
-   section: {
-    flex:1,
+  section: {
+    flex: 1,
     marginBottom: 24,
   },
   title: {
