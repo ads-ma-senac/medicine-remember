@@ -27,8 +27,9 @@ export function generateNextDoses(
 
     const interval = frequencyToHours[frequency as FrequencyValue];
 
+    const randomHour = Math.floor(Math.random() * 24);
     const currentDate = new Date();
-    const start = startTime ? new Date(startTime) : dateUtils.addHours(currentDate, 4);
+    const start = startTime ? new Date(startTime) : dateUtils.addHours(currentDate, randomHour);
     const end = endTime ? new Date(endTime) : dateUtils.addDays(currentDate, 7);
 
     if (isNaN(start.getTime()) || isNaN(end.getTime()) || interval <= 0)
