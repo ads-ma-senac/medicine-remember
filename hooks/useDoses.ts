@@ -14,10 +14,14 @@ export const useDoses = () => {
       ? doses.filter((dose) => dose.reminderId === reminderId)
       : doses;
 
-    return relevantDoses
-      .filter((dose) => dateUtils.isAfterNow(dose.datetime) && !dose.taken)
-      .sort((a, b) => dateUtils.compareAsc(a.datetime, b.datetime))[0] ?? null;
+    return (
+      relevantDoses
+        .filter((dose) => dateUtils.isAfterNow(dose.datetime) && !dose.taken)
+        .sort((a, b) => dateUtils.compareAsc(a.datetime, b.datetime))[0] ?? null
+    );
   };
 
-  return { doses, upcomingDoses24h, getNextDose };
+  const getAllActiveDoses = (): Dose[] => doses.filter((d) => d.visibility);
+
+  return { doses, upcomingDoses24h, getNextDose, getAllActiveDoses };
 };

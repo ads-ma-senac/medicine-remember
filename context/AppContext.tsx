@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Dose } from "@/types/Dose";
-import { Reminder } from "@/types/Reminder";
 import { dateUtils } from "@/lib/dateUtils";
 import { generateNextDoses } from "@/lib/doseUtils";
+import { Dose } from "@/types/Dose";
+import { Reminder } from "@/types/Reminder";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AppContextType = {
   reminders: Reminder[];
@@ -80,21 +80,26 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const disabledReminderById = (reminderId: string) => {
     const reminder = reminders.find((r) => r.id === reminderId);
 
+    const filterReminders = reminders.filter((r) => r.id !== reminderId);
+    const filterDoses = doses.filter((d) => d.reminderId !== reminderId);
+
     if (reminder) {
       reminder.active = !reminder.active;
 
-      const dosesUpdate = doses.map((d) => {
-        if (d.reminderId === reminderId && dateUtils.isAfterNow(d.datetime)) {
-          return {
-            ...d,
-            taken: !d.taken,
-          };
-        }
-        return d;
-      });
+      const dosesByReminderId = doses
+        .filter((r) => r.reminderId === reminderId)
+        .map((d) => {
+          if (d.reminderId === reminderId && dateUtils.isAfterNow(d.datetime)) {
+            return {
+              ...d,
+              visibility: !d.visibility,
+            };
+          }
+          return d;
+        });
 
-      setReminders((prev) => [...prev, reminder]);
-      setDoses((prev) => [...prev, ...dosesUpdate]);
+      setReminders([...filterReminders, reminder]);
+      setDoses([...filterDoses, ...dosesByReminderId]);
     }
   };
   return (

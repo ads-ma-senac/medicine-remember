@@ -3,8 +3,8 @@ import * as Crypto from "expo-crypto";
 import { FrequencyValue, frequencyToHours } from "@/types/Frequency";
 import { Reminder, ReminderType } from "@/types/Reminder";
 
-import { Dose } from "@/types/Dose";
 import { dateUtils } from "@/lib/dateUtils";
+import { Dose } from "@/types/Dose";
 
 export function dosaFormat(reminder: Reminder) {
   const suffix: Record<ReminderType, string> = {
@@ -40,11 +40,13 @@ export function generateNextDoses(
   let current = new Date(start);
 
   while (current <= end) {
+    const uuid = Crypto.randomUUID();
     doses.push({
-      id: Crypto.randomUUID(),
+      id: uuid,
       datetime: current,
       reminderId,
       taken: false,
+      visibility: true,
     });
     current = dateUtils.addHours(current, interval);
   }

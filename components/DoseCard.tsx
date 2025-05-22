@@ -1,13 +1,33 @@
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Switch, Text, useTheme } from "react-native-paper";
 
 import { Dose } from "@/types/Dose";
-import React from "react";
-import { dateUtils } from "@/lib/dateUtils";
 
 export default function DoseCard({ dose }: { dose: Dose }) {
   const theme = useTheme();
-  console.log(dose.datetime);
+
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [colorCircularIdentifier, setColorCircularIdentifier] =
+    useState("#05df72");
+
+  useEffect(() => {
+    if (dose) {
+      setIsSwitchOn(dose.taken);
+      setColorCircularIdentifier(dose.taken ? "#05df72" : "#939393");
+    }
+  }, [dose]);
+
+  const handleToggleSwitch = () => {
+    if (dose) {
+      setIsSwitchOn((prev) => {
+        const newVal = !prev;
+        setColorCircularIdentifier(newVal ? "#05df72" : "#939393");
+        return newVal;
+      });
+    }
+  };
+
   return (
     <View
       style={[
@@ -16,14 +36,22 @@ export default function DoseCard({ dose }: { dose: Dose }) {
       ]}
     >
       <View style={styles.cardDetailsContainer}>
-        <View style={styles.cardDetails}>
-          <Text style={[styles.cardTitle]}>{dose.taken}</Text>
-        </View>
-        <View style={styles.cardDetails}>
-          <Text style={[styles.cardTitle]}>
-            {dateUtils.formatDate(dose.datetime)}
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <View
+            style={[
+              styles.circle,
+              { backgroundColor: colorCircularIdentifier },
+            ]}
+          />
+          <Text style={[styles.text, { color: theme.colors.onSurface }]}>
+            Tomar medicamentos
           </Text>
         </View>
+        <Switch
+          value={isSwitchOn}
+          onValueChange={handleToggleSwitch}
+          color="#05df72"
+        />
       </View>
     </View>
   );
@@ -31,31 +59,28 @@ export default function DoseCard({ dose }: { dose: Dose }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderRadius: 12,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderRadius: 8,
     flexDirection: "row",
-    alignItems: "center",
     gap: 16,
   },
   cardDetailsContainer: {
     flex: 1,
-    flexDirection: "column",
-    gap: 6,
   },
-  cardDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
+  cardDetails: {},
   cardTitle: {
     fontSize: 24,
     fontWeight: "bold",
   },
   cardText: {
     fontSize: 16,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   image: {
     flex: 1,
@@ -73,5 +98,10 @@ const styles = StyleSheet.create({
     maxWidth: 128,
     height: 32,
     fontWeight: "bold",
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 12,
   },
 });

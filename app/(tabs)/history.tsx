@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, View } from "react-native";
-import { SegmentedButtons, Text } from "react-native-paper";
+import { SegmentedButtons, Text, useTheme } from "react-native-paper";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import DoseCard from "@/components/DoseCard";
@@ -7,29 +7,52 @@ import { useDoses } from "@/hooks/useDoses";
 import { useState } from "react";
 
 export default function History() {
-  const { doses } = useDoses();
+  const theme = useTheme();
+  const { getAllActiveDoses } = useDoses();
   const [value, setValue] = useState("");
-
+  const doses = getAllActiveDoses();
   return (
     <DefaultScreen>
       <View style={styles.container}>
         <Text style={styles.title}>Histórico</Text>
-        <SegmentedButtons
-          value={value}
-          onValueChange={setValue}
-          style={{ borderRadius: 4 }}
-          buttons={[
-            {
-              value: "day",
-              label: "Dia",
-            },
-            {
-              value: "week",
-              label: "Semana",
-            },
-            { value: "month", label: "Mês" },
-          ]}
-        />
+        <View
+          style={{
+            borderRadius: 8,
+            backgroundColor: theme.colors.primaryContainer,
+          }}
+        >
+          <SegmentedButtons
+            value={value}
+            onValueChange={setValue}
+            style={{
+              borderRadius: 8,
+              backgroundColor: theme.colors.background,
+            }}
+            buttons={[
+              {
+                value: "day",
+                label: "Dia",
+                style: {
+                  borderRadius: 8,
+                  borderColor: "none",
+                },
+                labelStyle: { fontWeight: "bold" },
+              },
+              {
+                value: "week",
+                label: "Semana",
+                style: { borderColor: "none" },
+                labelStyle: { fontWeight: "bold" },
+              },
+              {
+                value: "month",
+                label: "Mês",
+                style: { borderRadius: 8, borderColor: "none" },
+                labelStyle: { fontWeight: "bold" },
+              },
+            ]}
+          />
+        </View>
         <View style={styles.section}>
           <FlatList
             data={doses}

@@ -29,16 +29,17 @@ export default function FormPicker({
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={{ borderRadius: 8, overflow: "hidden" }}>
+      <View style={{ borderRadius: 8, overflow: "hidden", width: "100%" }}>
         <Picker
           selectedValue={value}
           onValueChange={onChange}
-          itemStyle={{ height: 44 }}
+          itemStyle={{ height: 62 }}
           style={[
             styles.picker,
             {
               backgroundColor: theme.colors.primaryContainer,
               color: theme.colors.onSurface,
+              width: "100%",
             },
             style,
           ]}
@@ -72,6 +73,5 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     borderWidth: 0,
     borderColor: "transparent",
-    boxSizing: "border-box",
   },
 });
