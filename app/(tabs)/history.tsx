@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { SegmentedButtons, Text, useTheme } from "react-native-paper";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import DoseCard from "@/components/DoseCard";
@@ -11,7 +11,9 @@ export default function History() {
   const theme = useTheme();
   const { getAllActiveDoses } = useDoses();
   const [value, setValue] = useState("");
+  
   const doses = getAllActiveDoses();
+
   return (
     <DefaultScreen>
       <View style={styles.container}>
@@ -20,8 +22,8 @@ export default function History() {
           doses.length === 0 ? (
             <EmptyState title="Nenhum histórico disponível" messagem="Comece a tomar seus remédios para registrar aqui" />
           ) : (
-            <View style={{ gap: 16 }}>
-              {/* <View
+            <View style={{ gap: 16, flex:1 }}>
+              <View
                 style={{
                   borderRadius: 8,
                   backgroundColor: theme.colors.primaryContainer,
@@ -58,7 +60,7 @@ export default function History() {
                     },
                   ]}
                 />
-              </View>*/}
+              </View>
               <View style={styles.section}> 
                 <FlatList
                   data={doses}
