@@ -33,6 +33,7 @@ export default function FormPicker({
         <Picker
           selectedValue={value}
           onValueChange={onChange}
+          itemStyle={{ height: 44 }}
           style={[
             styles.picker,
             {
@@ -65,11 +66,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   picker: {
-    minHeight: 56,
+    height: 62,
     fontSize: 18,
     paddingLeft: 16,
     paddingRight: 16,
-    borderWidth:0,
+    borderWidth: 0,
     borderColor: "transparent",
     boxSizing: "border-box",
   },

@@ -1,5 +1,5 @@
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { Colors } from "@/constants/colors";
 import { AppProvider } from "@/context/AppContext";
@@ -20,12 +20,17 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <PaperProvider theme={paperTheme}>
         <AppProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
-          <StatusBar style="auto" />
+          <SafeAreaView
+            style={{ flex: 1 }}
+            edges={["top", "bottom", "left", "right"]}
+          >
+            <Stack
+              screenOptions={{
+                headerShown: false,
+              }}
+            />
+            <StatusBar style="auto" />
+          </SafeAreaView>
         </AppProvider>
       </PaperProvider>
     </SafeAreaProvider>
