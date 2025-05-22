@@ -49,6 +49,7 @@ export default function ReminderDetailsById() {
     frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
 
   const handleEdit = () => router.push(`/reminders/${id}/editar`);
+  const handleHistory = () => router.push(`/history`);
   const handleDelete = () => {
     if (reminder) {
       deleteReminder(reminder.id);
@@ -69,6 +70,7 @@ export default function ReminderDetailsById() {
           colorCircularIdentifier={colorCircularIdentifier}
           onEdit={handleEdit}
           onDelete={handleDelete}
+          onViewALL={handleHistory}
         />
       </View>
     </DefaultScreen>

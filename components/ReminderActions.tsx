@@ -9,13 +9,14 @@ export function ReminderActions({
     colorCircularIdentifier,
     onEdit,
     onDelete,
+    onViewALL,
 }: any) {
     const theme = useTheme();
 
     return (
         <View style={styles.container}>
             <ActionButton icon="pencil-outline" text="Editar Informações" onPress={onEdit} />
-            <ActionButton icon="clock-time-four" text="Ver histórico" onPress={() => { }} />
+            <ActionButton icon="clock-time-four" text="Ver histórico" onPress={onViewALL} />
             <View style={[styles.button, { backgroundColor: theme.colors.inverseOnSurface, justifyContent: "space-between" }]}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
                     <View style={[styles.circle, { backgroundColor: colorCircularIdentifier }]} />

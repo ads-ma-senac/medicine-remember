@@ -5,8 +5,8 @@ import ActionsSection from "@/components/ActionsSection";
 import { DefaultScreen } from "@/components/DefaultScreen";
 import NextDoseInfo from "@/components/NextDoseInfo";
 import ReminderSection from "@/components/ReminderSection";
-import { router } from "expo-router";
 import { useReminders } from "@/hooks/useReminders";
+import { router } from "expo-router";
 import { useTheme } from "react-native-paper";
 
 export default function Index() {
@@ -35,7 +35,7 @@ export default function Index() {
             label="Novo lembrete"
             onPress={() => router.push("/add-reminder")}
           />
-          <ActionCard icon="eye" label="Ver todos" />
+          <ActionCard icon="eye" label="Ver todos" onPress={() => router.push("/history")} />
         </ActionsSection>
         <ReminderSection
           title={"Últimos lembretes cadastrados"}
