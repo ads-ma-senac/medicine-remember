@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
+import { EmptyState } from "@/components/EmptyState";
 import ReminderCardStatus from "@/components/ReminderCardStatus";
 import { useReminders } from "@/hooks/useReminders";
 
@@ -14,15 +15,21 @@ export default function Reminders() {
     <DefaultScreen>
       <View style={styles.container}>
         <Text style={styles.title}>Visão geral</Text>
-        <View style={styles.section}>
-          <FlatList
-            data={allReminders}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <ReminderCardStatus reminder={item} />}
-            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+        {
+          allReminders.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <View style={styles.section}>
+              <FlatList
+                data={allReminders}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => <ReminderCardStatus reminder={item} />}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+          )
+        }
       </View>
     </DefaultScreen>
   );

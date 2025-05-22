@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Switch, Text, useTheme } from "react-native-paper";
 
+import { useReminders } from "@/hooks/useReminders";
 import { Dose } from "@/types/Dose";
 
 export default function DoseCard({ dose }: { dose: Dose }) {
   const theme = useTheme();
+  const { getReminderById } = useReminders()
 
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [colorCircularIdentifier, setColorCircularIdentifier] =
     useState("#05df72");
+
+
+  const reminder = getReminderById(dose.reminderId)
 
   useEffect(() => {
     if (dose) {
@@ -37,14 +42,8 @@ export default function DoseCard({ dose }: { dose: Dose }) {
     >
       <View style={styles.cardDetailsContainer}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <View
-            style={[
-              styles.circle,
-              { backgroundColor: colorCircularIdentifier },
-            ]}
-          />
           <Text style={[styles.text, { color: theme.colors.onSurface }]}>
-            Tomar medicamentos
+            {reminder?.name}
           </Text>
         </View>
         <Switch
@@ -69,6 +68,9 @@ const styles = StyleSheet.create({
   },
   cardDetailsContainer: {
     flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16
   },
   cardDetails: {},
   cardTitle: {

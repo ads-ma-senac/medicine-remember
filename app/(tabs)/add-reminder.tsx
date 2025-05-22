@@ -28,11 +28,8 @@ export default function AddReminder() {
   const [type, setType] = useState<ReminderType>("pill");
   const [dosage, setDosage] = useState<number>();
   const [frequency, setFrequency] = useState<FrequencyValue>("1d");
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<Date | undefined>(undefined);
   const [message, setMessage] = useState<string | undefined>("");
 
-  const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
   const clearForm = () => {
@@ -40,23 +37,8 @@ export default function AddReminder() {
     setType("pill");
     setDosage(undefined);
     setFrequency("1d");
-    setStartTime("");
-    setEndTime(undefined);
   };
 
-  const onChange = ({ type }: any, selectedDate?: any) => {
-    if (type === "set") {
-      const currentDate = selectedDate;
-      setDate(currentDate);
-
-      if (Platform.OS === "android") {
-        toggleDatepicker();
-        setStartTime(currentDate);
-      }
-    } else {
-      toggleDatepicker();
-    }
-  };
 
   const handleSave = async () => {
     const UUID = Crypto.randomUUID();

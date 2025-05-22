@@ -8,8 +8,8 @@ import { Dose } from "@/types/Dose";
 
 export function dosaFormat(reminder: Reminder) {
   const suffix: Record<ReminderType, string> = {
-    pill: "cápsula",
-    capsule: "comprimido",
+    pill: "comprimido", 
+    capsule: "cápsula",
     injection: "injeção",
     syrup: "um colher",
   };
@@ -27,6 +27,7 @@ export function generateNextDoses(
 
   const randomHour = Math.floor(Math.random() * 24);
   const currentDate = new Date();
+
   const start = startTime
     ? new Date(startTime)
     : dateUtils.addHours(currentDate, randomHour);
