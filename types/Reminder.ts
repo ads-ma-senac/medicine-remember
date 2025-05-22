@@ -10,7 +10,7 @@ export type Reminder = {
   frequency: string;
   startTime?: Date;
   endTime?: Date;
-  active?: boolean;
+  active: boolean;
   createdAt: Date;
   updatedAt: Date;
 };

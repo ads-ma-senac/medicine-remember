@@ -1,273 +1,95 @@
-import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Switch, Text, useTheme } from "react-native-paper";
 import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Text } from "react-native-paper";
 
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { DefaultScreen } from "@/components/DefaultScreen";
-import { Image } from "expo-image";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { capitalizeFirstLetter } from "@/lib/utils";
-import { dateUtils } from "@/lib/dateUtils";
-import { dosaFormat } from "@/lib/doseUtils";
-import { frequencyOptions } from "@/types/Frequency";
-import { reminderTypeToImage } from "@/types/Reminder";
+import { ReminderActions } from "@/components/ReminderActions";
+import { ReminderImage } from "@/components/ReminderImage";
+import { ReminderInfoCard } from "@/components/ReminderInfoCard";
 import { useDoses } from "@/hooks/useDoses";
 import { useReminders } from "@/hooks/useReminders";
+import { frequencyOptions } from "@/types/Frequency";
+import { reminderTypeToImage } from "@/types/Reminder";
 
 export default function ReminderDetailsById() {
-  const theme = useTheme();
-  const { id } = useLocalSearchParams();
-  const { getNextDose } = useDoses();
-  const { getReminderById, deleteReminder, disabledReminderById } =
-    useReminders();
+    const { id } = useLocalSearchParams();
+    const { getNextDose } = useDoses();
+    const { getReminderById, deleteReminder, disabledReminderById } = useReminders();
 
-  const reminder = getReminderById(id as string);
-  const nextDose = getNextDose(reminder?.id);
+    const reminder = getReminderById(id as string);
+    const nextDose = getNextDose(reminder?.id);
 
-  const [colorCircularIdentifier, setColorCircularIdentifier] =
-    useState("#05df72");
+    const [isSwitchOn, setIsSwitchOn] = useState(false);
+    const [colorCircularIdentifier, setColorCircularIdentifier] = useState("#05df72");
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const handleDeletePress = () => setShowConfirmDialog(true);
 
-  const [isSwitchOn, setIsSwitchOn] = useState(reminder?.active ?? false);
+    useEffect(() => {
+        if (reminder) {
+            setIsSwitchOn(reminder.active);
+            setColorCircularIdentifier(reminder.active ? "#05df72" : "#939393");
+        }
+    }, [reminder]);
 
-  const onToggleSwitch = () => {
-    setColorCircularIdentifier(!isSwitchOn ? "#05df72" : "#939393");
-    setIsSwitchOn(!isSwitchOn);
+    const handleToggleSwitch = () => {
+        if (reminder) {
+            disabledReminderById(reminder.id);
+            setIsSwitchOn((prev) => {
+                const newVal = !prev;
+                setColorCircularIdentifier(newVal ? "#05df72" : "#939393");
+                return newVal;
+            });
+        }
+    };
 
-    if (reminder) disabledReminderById(reminder?.id);
-  };
+    const frequencyLabel = frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
 
-  const frequencyLabel =
-    frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
+    const handleEdit = () => router.push(`/reminders/${id}/editar`);
+    const handleDelete = () => {
+        if (reminder) {
+            deleteReminder(reminder.id);
+            router.navigate("/reminders");
+        }
+    };
 
-  const imageSource = reminder ? reminderTypeToImage[reminder.type] : null;
+    if (!reminder) return <Text style={{ margin: 20 }}>Carregando...</Text>;
 
-  const handleDelete = () => {
-    if (reminder) {
-      deleteReminder(reminder?.id);
-      router.navigate("/reminders");
-    }
-  };
-
-  return (
-    <DefaultScreen>
-      <View>
-        {reminder && (
-          <View style={styles.cardContainer}>
-            <View
-              style={{
-                width: 128,
-                height: 128,
-                alignItems: "center",
-                minWidth: "100%",
-              }}
-            >
-              <Image style={styles.image} source={imageSource} />
+    return (
+        <DefaultScreen>
+            <View style={styles.container}>
+                <ReminderImage source={reminderTypeToImage[reminder.type]} />
+                <ReminderInfoCard reminder={reminder} frequencyLabel={frequencyLabel} />
+                <ReminderActions
+                    isSwitchOn={isSwitchOn}
+                    onToggleSwitch={handleToggleSwitch}
+                    colorCircularIdentifier={colorCircularIdentifier}
+                    onEdit={handleEdit}
+                    onDelete={handleDeletePress}
+                />
+                {showConfirmDialog && (
+                    <ConfirmDialog
+                        visible={showConfirmDialog}
+                        title="Deletar medicamento"
+                        message="Tem certeza que deseja deletar este medicamento?"
+                        onCancel={() => setShowConfirmDialog(false)}
+                        onConfirm={() => {
+                            handleDelete();
+                            setShowConfirmDialog(false);
+                        }}
+                    />
+                )}
             </View>
-            <View style={styles.cardDetailsContainer}>
-              <View style={[styles.cardDetails]}>
-                <Text
-                  style={[
-                    styles.cardTitle,
-                    { width: "100%", textAlign: "center" },
-                  ]}
-                >
-                  {capitalizeFirstLetter(reminder.name)}
-                </Text>
-              </View>
-              <View style={{ width: "100%", flex: 1 }}>
-                <View style={[styles.cardDetails, { height: 34 }]}>
-                  <Text style={[styles.cardText]}>{dosaFormat(reminder)}</Text>
-                </View>
-                <View style={[styles.cardDetails, { height: 34 }]}>
-                  <Text style={styles.cardText}>
-                    Próxima dose{" "}
-                    {nextDose
-                      ? dateUtils.formatDistance(nextDose.datetime)
-                      : ""}
-                  </Text>
-                </View>
-              </View>
-              <View style={{ width: "100%", gap: 8 }}>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    {
-                      backgroundColor: theme.colors.inverseOnSurface,
-                      gap: 6,
-                      alignItems: "center",
-                    },
-                  ]}
-                  onPress={() => {
-                    router.push(`/reminders/${id}/editar`);
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name={"pencil-outline"}
-                    size={20}
-                    color={theme.colors.onSurface}
-                    style={{ marginBottom: -1 }}
-                  />
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      { color: theme.colors.onSurface },
-                    ]}
-                  >
-                    Editar Informações
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    {
-                      backgroundColor: theme.colors.inverseOnSurface,
-                      gap: 6,
-                      alignItems: "center",
-                    },
-                  ]}
-                >
-                  <MaterialCommunityIcons
-                    name={"clock-time-four"}
-                    size={20}
-                    color={theme.colors.onSurface}
-                    style={{ marginBottom: 3 }}
-                  />
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      { color: theme.colors.onSurface },
-                    ]}
-                  >
-                    Ver histórico
-                  </Text>
-                </TouchableOpacity>
-                <View
-                  style={[
-                    styles.button,
-                    {
-                      backgroundColor: theme.colors.inverseOnSurface,
-                      justifyContent: "space-between",
-                      gap: 6,
-                      alignItems: "center",
-                    },
-                  ]}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 6,
-                    }}
-                  >
-                    <View
-                      style={[
-                        styles.circularIdentifier,
-                        { backgroundColor: colorCircularIdentifier },
-                      ]}
-                    ></View>
-                    <Text
-                      style={[
-                        styles.buttonText,
-                        { color: theme.colors.onSurface },
-                      ]}
-                    >
-                      Tomar medicamentos
-                    </Text>
-                  </View>
-                  <Switch
-                    value={isSwitchOn}
-                    onValueChange={onToggleSwitch}
-                    color="#05df72"
-                  />
-                </View>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    {
-                      backgroundColor: theme.colors.inverseOnSurface,
-                      gap: 6,
-                      alignItems: "center",
-                    },
-                  ]}
-                  onPress={handleDelete}
-                >
-                  <MaterialCommunityIcons
-                    name={"trash-can-outline"}
-                    size={20}
-                    color={theme.colors.error}
-                    style={{ marginBottom: 3 }}
-                  />
-                  <Text
-                    style={[styles.buttonText, { color: theme.colors.error }]}
-                  >
-                    Deletar medicamento
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        )}
-      </View>
-    </DefaultScreen>
-  );
+        </DefaultScreen>
+    );
 }
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    flexDirection: "column",
-    alignItems: "center",
-    paddingBottom: 16,
-    height: "100%",
-  },
-  cardDetailsContainer: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 6,
-    width: "100%",
-  },
-  cardDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderRadius: 8,
-    paddingRight: 16,
-    paddingLeft: 16,
-    width: "100%",
-    height: 56,
-  },
-  cardTitle: {
-    fontSize: 32,
-    fontWeight: "bold",
-  },
-  cardText: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  image: {
-    flex: 1,
-    width: 128,
-    height: 128,
-  },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 8,
-    paddingRight: 16,
-    paddingLeft: 16,
-    width: "100%",
-    height: 68,
-    gap: 8,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  circularIdentifier: {
-    width: 20,
-    height: 20,
-    borderRadius: 12,
-  },
+    container: {
+        padding: 16,
+        alignItems: "center",
+        flex: 1,
+        gap: 16,
+    },
 });

@@ -1,7 +1,8 @@
 import * as Crypto from "expo-crypto";
 
-import { Button, Text, useTheme } from "react-native-paper";
 import { FrequencyValue, frequencyOptions } from "@/types/Frequency";
+import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
+import React, { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -10,15 +11,14 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useState } from "react";
-import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
+import { Button, Text, useTheme } from "react-native-paper";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import FormField from "@/components/Form/InputField";
-import FormPicker from "@/components/Form/PickerField";
 import NumericInputField from "@/components/Form/NumericInputField";
-import { router } from "expo-router";
+import FormPicker from "@/components/Form/PickerField";
 import { useReminders } from "@/hooks/useReminders";
+import { router } from "expo-router";
 
 export default function AddReminder() {
   const theme = useTheme();
@@ -66,16 +66,6 @@ export default function AddReminder() {
       return;
     }
 
-    if (!startTime && endTime && endTime.getTime() < new Date().getTime()) {
-      setMessage("A data de término não pode ser menor que a data atual");
-      return;
-    }
-
-    // if (startTime && endTime && startTime.getTime() > endTime.getTime()) {
-    //   setMessage("A data de início não pode ser maior que a data de término");
-    //   return;
-    // }
-
     setMessage("");
 
     const reminder: Reminder = {
@@ -85,8 +75,6 @@ export default function AddReminder() {
       dosage,
       frequency,
       active: true,
-      startTime: new Date(),
-      endTime,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

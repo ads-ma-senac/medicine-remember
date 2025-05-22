@@ -1,12 +1,12 @@
 import { MD3LightTheme, PaperProvider } from "react-native-paper";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { AppProvider } from "@/context/AppContext";
 import { Colors } from "@/constants/colors";
-import { MD3DarkTheme } from "react-native-paper";
+import { AppProvider } from "@/context/AppContext";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
+import { MD3DarkTheme } from "react-native-paper";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -20,17 +20,12 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <PaperProvider theme={paperTheme}>
         <AppProvider>
-          <SafeAreaView
-            style={{ flex: 1 }}
-            edges={["top", "bottom", "left", "right"]}
-          >
-            <Stack
-              screenOptions={{
-                headerShown: false,
-              }}
-            />
-            <StatusBar style="auto" />
-          </SafeAreaView>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          />
+          <StatusBar style="auto" />
         </AppProvider>
       </PaperProvider>
     </SafeAreaProvider>
