@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Switch, Text, useTheme } from "react-native-paper";
 
 import { useReminders } from "@/hooks/useReminders";
+import { dateUtils } from "@/lib/dateUtils";
 import { Dose } from "@/types/Dose";
 
 export default function DoseCard({ dose }: { dose: Dose }) {
@@ -43,7 +44,7 @@ export default function DoseCard({ dose }: { dose: Dose }) {
       <View style={styles.cardDetailsContainer}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
           <Text style={[styles.text, { color: theme.colors.onSurface }]}>
-            {reminder?.name}
+            {reminder?.name} - {dateUtils.formatDistance(dose?.datetime)}
           </Text>
         </View>
         <Switch
