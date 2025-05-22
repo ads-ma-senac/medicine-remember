@@ -21,11 +21,6 @@ export default function Index() {
         <NextDoseInfo />
         <ActionsSection>
           <ActionCard
-            icon="history"
-            label="Histórico"
-            onPress={() => router.push("/history")}
-          />
-          <ActionCard
             icon="pill"
             label="Lembretes"
             onPress={() => router.push("/(tabs)/reminders")}
