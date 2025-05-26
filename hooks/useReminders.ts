@@ -1,11 +1,12 @@
-import { Reminder } from "@/types/Reminder";
 import { useAppContext } from "@/context/AppContext";
+import { Reminder } from "@/types/Reminder";
 
 interface UseRemindersReturn {
   getAllReminders: () => Reminder[];
   getLastActiveReminders: () => Reminder[];
   getReminderById: (reminderId: string) => Reminder | undefined;
   addReminder: (reminder: Reminder) => void;
+  updateReminder: (reminder: Reminder) => void;
   deleteReminder: (reminderId: string) => void;
   disabledReminderById: (reminderId: string) => void;
 }
@@ -14,6 +15,7 @@ export const useReminders = (): UseRemindersReturn => {
   const {
     reminders = [],
     addReminder,
+    updateReminder,
     deleteReminder,
     disabledReminderById,
   } = useAppContext();
@@ -39,6 +41,7 @@ export const useReminders = (): UseRemindersReturn => {
     getReminderById,
     getLastActiveReminders,
     addReminder,
+    updateReminder,
     deleteReminder,
     disabledReminderById,
   };

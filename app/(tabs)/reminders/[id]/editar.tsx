@@ -1,7 +1,8 @@
-import * as Crypto from "expo-crypto";
 
-import { Button, Text, useTheme } from "react-native-paper";
 import { FrequencyValue, frequencyOptions } from "@/types/Frequency";
+import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -10,78 +11,70 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useState } from "react";
-import { Reminder, ReminderType, typesMedicine } from "@/types/Reminder";
-import { router, useLocalSearchParams } from "expo-router";
+import { Button, Text, useTheme } from "react-native-paper";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import FormField from "@/components/Form/InputField";
-import FormPicker from "@/components/Form/PickerField";
 import NumericInputField from "@/components/Form/NumericInputField";
+import FormPicker from "@/components/Form/PickerField";
 import { useReminders } from "@/hooks/useReminders";
 
 export default function EditReminder() {
   const theme = useTheme();
-  const { getReminderById } = useReminders();
+  const { getReminderById, updateReminder } = useReminders();
 
   const { id } = useLocalSearchParams();
 
-  const reminder = getReminderById(id as string);
-
-  const [name, setName] = useState(reminder?.name as string);
-  const [type, setType] = useState<ReminderType>(
-    reminder?.type as ReminderType
-  );
-  const [dosage, setDosage] = useState<number>(reminder?.dosage as number);
-  const [frequency, setFrequency] = useState<FrequencyValue>(
-    reminder?.frequency as FrequencyValue
-  );
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<Date | undefined>(undefined);
+  const [name, setName] = useState("");
+  const [type, setType] = useState<ReminderType>();
+  const [dosage, setDosage] = useState<number>();
+  const [frequency, setFrequency] = useState<FrequencyValue>();
   const [message, setMessage] = useState<string | undefined>("");
 
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
+  useEffect(() => {
+    const reminder = getReminderById(id as string);
+
+    if (!reminder) {
+      router.push("/");
+      return;
+    }
+
+    setName(reminder.name);
+    setType(reminder.type);
+    setDosage(reminder.dosage);
+    setFrequency(reminder.frequency as FrequencyValue);
+  }, [id]);
 
   const clearForm = () => {
     setName("");
     setType("pill");
     setDosage(0);
     setFrequency("1d");
-    setStartTime("");
-    setEndTime(undefined);
   };
 
   const handleSave = async () => {
-    const UUID = Crypto.randomUUID();
 
     if (!name || !type || !dosage || !frequency || dosage < 1) {
       setMessage("Preencha todos os campos obrigatórios");
       return;
     }
 
-    if (!startTime && endTime && endTime.getTime() < new Date().getTime()) {
-      setMessage("A data de término não pode ser menor que a data atual");
-      return;
-    }
-
     setMessage("");
 
     const reminder: Reminder = {
-      id: UUID,
+      id: id as string,
       name,
       type,
       dosage,
       frequency,
       active: true,
-      startTime: new Date(),
-      endTime,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
     clearForm();
-    router.push("/");
+    updateReminder(reminder);
+    router.push(`/reminders/${reminder.id}`);
   };
 
   return (

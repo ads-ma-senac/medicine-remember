@@ -10,6 +10,7 @@ type AppContextType = {
   reminders: Reminder[];
   doses: Dose[];
   addReminder: (reminder: Reminder) => void;
+  updateReminder: (reminder: Reminder) => void;
   deleteReminder: (reminderId: string) => void;
   disabledReminderById: (reminderId: string) => void;
 };
@@ -70,6 +71,34 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setDoses((prev) => [...prev, ...newDoses]);
   };
 
+  const updateReminder = (reminder: Reminder) => {
+    const filterReminders = reminders.filter((r) => r.id !== reminder.id);
+    const prevReminder = reminders.find((r) => r.id === reminder.id);
+
+    setReminders([...filterReminders, reminder]);
+
+    if (reminder.frequency !== prevReminder?.frequency) {
+
+      const filterDoses = doses.filter((d) => {
+        if (d.reminderId !== reminder.id) return d;
+        if (d.reminderId === reminder.id && !dateUtils.isAfterNow(d.datetime)) {
+          return d
+        }
+      });
+
+      const newDoses = generateNextDoses(
+        reminder.id,
+        reminder.frequency,
+        reminder.startTime,
+        reminder.endTime
+      );
+
+      setDoses([...filterDoses, ...newDoses]);
+
+    }
+
+  };
+
   const deleteReminder = (reminderId: string) => {
     const filterReminders = reminders.filter((r) => r.id !== reminderId);
     const filterDoses = doses.filter((d) => d.reminderId !== reminderId);
@@ -109,6 +138,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         doses,
         addReminder,
         deleteReminder,
+        updateReminder,
         disabledReminderById,
       }}
     >
