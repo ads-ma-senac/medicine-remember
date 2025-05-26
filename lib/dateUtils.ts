@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import isToday from "dayjs/plugin/isToday";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isToday from "dayjs/plugin/isToday";
 import relativeTime from "dayjs/plugin/relativeTime";
+import utc from "dayjs/plugin/utc";
 
 import "dayjs/locale/pt-br";
 
@@ -53,6 +53,14 @@ export const dateUtils = {
 
     isToday(date: string | Date): boolean {
         return dayjs(date).isToday();
+    },
+
+    isWeek(date: string | Date): boolean {
+        return dayjs(date).isSame(dayjs(), 'weeks')
+    },
+
+    isMonth(date: string | Date): boolean {
+        return dayjs(date).isSame(dayjs(), 'month')
     },
 
     isBeforeNow(date: string | Date): boolean {
