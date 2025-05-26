@@ -24,18 +24,18 @@ export default function AddReminder() {
   const theme = useTheme();
   const { addReminder } = useReminders();
 
-  const [name, setName] = useState("");
-  const [type, setType] = useState<ReminderType>("pill");
-  const [dosage, setDosage] = useState<number>();
-  const [frequency, setFrequency] = useState<FrequencyValue>("1d");
-  const [message, setMessage] = useState<string | undefined>("");
+  const [name, setName] = useState<string>("");
+  const [type, setType] = useState<ReminderType>();
+  const [dosage, setDosage] = useState<number>(0);
+  const [frequency, setFrequency] = useState<FrequencyValue>();
+  const [message, setMessage] = useState<string | undefined>();
 
   const [showPicker, setShowPicker] = useState(false);
 
   const clearForm = () => {
     setName("");
     setType("pill");
-    setDosage(undefined);
+    setDosage(0);
     setFrequency("1d");
   };
 
@@ -77,7 +77,7 @@ export default function AddReminder() {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
-            <Text style={styles.title}>Novo medicamento</Text>
+            <Text style={styles.title}>Novo lembrete</Text>
             <View style={styles.formContainer}>
               <FormField label="Nome" value={name} onChangeText={setName} />
               <FormPicker
@@ -123,7 +123,7 @@ export default function AddReminder() {
                     { color: theme.colors.surface },
                   ]}
                 >
-                  Adicionar medicamento
+                  Adicionar lembrete
                 </Text>
               </Button>
             </View>

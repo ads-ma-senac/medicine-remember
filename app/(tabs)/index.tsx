@@ -31,6 +31,7 @@ export default function Index() {
             onPress={() => router.push("/add-reminder")}
           />
           <ActionCard icon="eye" label="Ver todos" onPress={() => router.push("/history")} />
+          <ActionCard icon="calendar" label="Hoje" onPress={() => router.push("/today")} />
         </ActionsSection>
         <ReminderSection
           title={"Últimos lembretes cadastrados"}

@@ -20,7 +20,7 @@ export function ReminderActions({
             <View style={[styles.button, { backgroundColor: theme.colors.inverseOnSurface, justifyContent: "space-between" }]}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
                     <View style={[styles.circle, { backgroundColor: colorCircularIdentifier }]} />
-                    <Text style={[styles.text, { color: theme.colors.onSurface }]}>Tomar medicamentos</Text>
+                    <Text style={[styles.text, { color: theme.colors.onSurface }]}>Status lembrete</Text>
                 </View>
                 <Switch value={isSwitchOn} onValueChange={onToggleSwitch} color="#05df72" />
             </View>
@@ -60,11 +60,11 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 16,
         width: "100%",
-        height: 56,
+        height: 64,
         gap: 8,
     },
     text: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: "bold",
     },
     circle: {

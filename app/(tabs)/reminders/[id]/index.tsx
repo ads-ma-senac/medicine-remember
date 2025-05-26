@@ -48,6 +48,7 @@ export default function ReminderDetailsById() {
   const frequencyLabel =
     frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
 
+
   const handleEdit = () => router.push(`/reminders/${id}/editar`);
   const handleHistory = () => router.push(`/history`);
   const handleDelete = () => {
@@ -62,8 +63,10 @@ export default function ReminderDetailsById() {
   return (
     <DefaultScreen>
       <View style={styles.container}>
-        <ReminderImage source={reminderTypeToImage[reminder.type]} />
-        <ReminderInfoCard reminder={reminder} frequencyLabel={frequencyLabel} />
+        <View style={{ width: "100%", marginBottom: 16 }}>
+          <ReminderImage source={reminderTypeToImage[reminder.type]} width={150} height={150} />
+          <ReminderInfoCard reminder={reminder} frequencyLabel={frequencyLabel} nextDose={nextDose} />
+        </View>
         <ReminderActions
           isSwitchOn={isSwitchOn}
           onToggleSwitch={handleToggleSwitch}
@@ -73,7 +76,7 @@ export default function ReminderDetailsById() {
           onViewALL={handleHistory}
         />
       </View>
-    </DefaultScreen>
+    </DefaultScreen >
   );
 }
 
