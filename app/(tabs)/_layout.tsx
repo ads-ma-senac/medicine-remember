@@ -97,6 +97,12 @@ export default function TabLayout() {
           href: null,
         }}
       />
+      <Tabs.Screen
+        name="today"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }

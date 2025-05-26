@@ -22,6 +22,8 @@ export const useDoses = () => {
   };
 
   const getAllActiveDoses = (): Dose[] => doses.filter((d) => d.visibility);
+  const getHistoryDoses = (): Dose[] => doses.filter((d) => (d.visibility && dateUtils.isBeforeNow(d.datetime)) || d.taken);
+  const getTodayDoses = (): Dose[] => doses.filter((d) => dateUtils.isToday(d.datetime) && d.visibility);
 
-  return { doses, upcomingDoses24h, getNextDose, getAllActiveDoses };
+  return { doses, upcomingDoses24h, getNextDose, getAllActiveDoses, getHistoryDoses, getTodayDoses };
 };
