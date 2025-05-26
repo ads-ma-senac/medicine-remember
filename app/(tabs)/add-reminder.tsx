@@ -25,9 +25,9 @@ export default function AddReminder() {
   const { addReminder } = useReminders();
 
   const [name, setName] = useState<string>("");
-  const [type, setType] = useState<ReminderType>();
+  const [type, setType] = useState<ReminderType>("capsule");
   const [dosage, setDosage] = useState<number>(0);
-  const [frequency, setFrequency] = useState<FrequencyValue>();
+  const [frequency, setFrequency] = useState<FrequencyValue>("1d");
   const [message, setMessage] = useState<string | undefined>();
 
   const [showPicker, setShowPicker] = useState(false);

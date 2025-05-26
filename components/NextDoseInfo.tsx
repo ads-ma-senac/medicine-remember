@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   label: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
     textAlign: "center",
   },
   time: {
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: "bold",
   },
   remaining: {

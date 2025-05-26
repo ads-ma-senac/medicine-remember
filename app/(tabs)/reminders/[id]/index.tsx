@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
@@ -10,6 +10,7 @@ import { useDoses } from "@/hooks/useDoses";
 import { useReminders } from "@/hooks/useReminders";
 import { frequencyOptions } from "@/types/Frequency";
 import { reminderTypeToImage } from "@/types/Reminder";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { Text } from "react-native-paper";
 
 export default function ReminderDetailsById() {
@@ -25,7 +26,7 @@ export default function ReminderDetailsById() {
   const [colorCircularIdentifier, setColorCircularIdentifier] =
     useState("#05df72");
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const handleDeletePress = () => setShowConfirmDialog(true);
+
 
   useEffect(() => {
     if (reminder) {
@@ -51,12 +52,21 @@ export default function ReminderDetailsById() {
 
   const handleEdit = () => router.push(`/reminders/${id}/editar`);
   const handleHistory = () => router.push(`/history`);
-  const handleDelete = () => {
-    if (reminder) {
-      deleteReminder(reminder.id);
-      router.navigate("/reminders");
-    }
+
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const handleDeletePress = () => {
+    bottomSheetRef.current?.expand();
   };
+
+  const handleConfirmDelete = () => {
+    bottomSheetRef.current?.close();
+    console.log("Medicamento deletado"); 
+  };
+
+  const handleCancelDelete = () => {
+    bottomSheetRef.current?.close();
+  }
 
   if (!reminder) return <Text style={{ margin: 20 }}>Carregando...</Text>;
 
@@ -67,14 +77,14 @@ export default function ReminderDetailsById() {
           <ReminderImage source={reminderTypeToImage[reminder.type]} width={150} height={150} />
           <ReminderInfoCard reminder={reminder} frequencyLabel={frequencyLabel} nextDose={nextDose} />
         </View>
-        <ReminderActions
-          isSwitchOn={isSwitchOn}
-          onToggleSwitch={handleToggleSwitch}
-          colorCircularIdentifier={colorCircularIdentifier}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onViewALL={handleHistory}
-        />
+         <ReminderActions
+            isSwitchOn={isSwitchOn}
+            onToggleSwitch={handleToggleSwitch}
+            colorCircularIdentifier={colorCircularIdentifier}
+            onEdit={handleEdit}
+            onDelete={handleDeletePress}
+            onViewALL={handleHistory}
+          />
       </View>
     </DefaultScreen >
   );

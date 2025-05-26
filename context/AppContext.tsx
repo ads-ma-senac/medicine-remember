@@ -6,6 +6,7 @@ import { scheduleMultipleNotifications } from "@/lib/scheduleMultipleNotificatio
 import { Dose } from "@/types/Dose";
 import { Reminder } from "@/types/Reminder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 
 type AppContextType = {
   reminders: Reminder[];
@@ -73,7 +74,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     const dates = newDoses.map( d => d.datetime);
 
-    await scheduleMultipleNotifications(dates)
+    if(Platform.OS == "android" || Platform.OS == "ios") {
+      await scheduleMultipleNotifications(dates)
+    } 
     
   };
 

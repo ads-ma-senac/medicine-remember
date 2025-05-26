@@ -31,6 +31,7 @@ export function generateNextDoses(
   const start = startTime
     ? new Date(startTime)
     : dateUtils.addHours(currentDate, randomHour);
+    
   const end = endTime ? new Date(endTime) : dateUtils.addDays(currentDate, 14);
 
   if (isNaN(start.getTime()) || isNaN(end.getTime()) || interval <= 0)
