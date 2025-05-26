@@ -40,6 +40,16 @@ export function generateNextDoses(
 
   let current = new Date(start);
 
+  const uuid = Crypto.randomUUID();
+  
+  doses.push({
+    id: uuid,
+    datetime: dateUtils.addSeconds(new Date(),30),
+    reminderId,
+    taken: false,
+    visibility: true,
+  })
+
   while (current <= end) {
     const uuid = Crypto.randomUUID();
     doses.push({

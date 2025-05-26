@@ -49,6 +49,10 @@ export const dateUtils = {
         return dayjs(date).add(days, "day").toDate();
     },
 
+    addSeconds(date: string | Date, second: number): Date {
+        return dayjs(date).add(second, "second").toDate();
+    },
+
     // Verificações
 
     isToday(date: string | Date): boolean {

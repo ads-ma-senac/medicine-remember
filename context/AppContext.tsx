@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { dateUtils } from "@/lib/dateUtils";
 import { generateNextDoses } from "@/lib/doseUtils";
+import { scheduleMultipleNotifications } from "@/lib/scheduleMultipleNotifications";
 import { Dose } from "@/types/Dose";
 import { Reminder } from "@/types/Reminder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -58,7 +59,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     if (!isLoading) saveDoses(doses);
   }, [doses]);
 
-  const addReminder = (reminder: Reminder) => {
+  const addReminder = async (reminder: Reminder)  => {
     setReminders((prev) => [reminder, ...prev]);
 
     const newDoses = generateNextDoses(
@@ -69,6 +70,11 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     );
 
     setDoses((prev) => [...prev, ...newDoses]);
+
+    const dates = newDoses.map( d => d.datetime);
+
+    await scheduleMultipleNotifications(dates)
+    
   };
 
   const updateReminder = (reminder: Reminder) => {
@@ -146,3 +152,5 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     </AppContext.Provider>
   );
 };
+
+
