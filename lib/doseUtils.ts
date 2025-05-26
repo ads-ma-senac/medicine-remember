@@ -8,7 +8,7 @@ import { Dose } from "@/types/Dose";
 
 export function dosaFormat(reminder: Reminder) {
   const suffix: Record<ReminderType, string> = {
-    pill: "comprimido", 
+    pill: "comprimido",
     capsule: "cápsula",
     injection: "injeção",
     syrup: "um colher",
@@ -31,7 +31,7 @@ export function generateNextDoses(
   const start = startTime
     ? new Date(startTime)
     : dateUtils.addHours(currentDate, randomHour);
-  const end = endTime ? new Date(endTime) : dateUtils.addDays(currentDate, 7);
+  const end = endTime ? new Date(endTime) : dateUtils.addDays(currentDate, 14);
 
   if (isNaN(start.getTime()) || isNaN(end.getTime()) || interval <= 0)
     return [];
