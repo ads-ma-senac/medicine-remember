@@ -17,6 +17,8 @@ export default function ReminderCardStatus({ reminder }: { reminder: Reminder })
 
     const imageSource = reminderTypeToImage[reminder.type];
 
+    const colorStatusBadge = reminder.active ? "#05df72" : "#939393";
+
     const handlePress = () => {
         router.push(`/reminders/${reminder.id}`);
     }
@@ -37,14 +39,14 @@ export default function ReminderCardStatus({ reminder }: { reminder: Reminder })
                     <Text style={[styles.cardTitle]}>
                         {capitalizeFirstLetter(reminder.name)}
                     </Text>
+                    <View style={[styles.badge, { backgroundColor: colorStatusBadge }]} >
+                        <Text style={[styles.cardText, { color: theme.colors.onSurface }]}>{reminder.active ? "Ativo" : "Pausado"}</Text>
+                    </View>
                 </View>
                 <View style={styles.cardDetails}>
                     <Text style={[styles.cardText]}>
                         {dosaFormat(reminder)}
                     </Text>
-                    <View style={[styles.badge, { backgroundColor: theme.colors.onSecondaryContainer }]} >
-                        <Text style={[styles.cardText, { color: theme.colors.onSecondary }]}>{reminder.active ? "Ativo" : "Pausado"}</Text>
-                    </View>
                 </View>
             </View>
         </TouchableOpacity>
@@ -85,11 +87,12 @@ const styles = StyleSheet.create({
         height: 52,
     },
     badge: {
+        flex: 1,
         padding: 4,
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-        borderRadius: 8,
+        borderRadius: 99,
         gap: 4,
         minWidth: 64,
         maxWidth: 128,

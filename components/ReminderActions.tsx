@@ -1,28 +1,47 @@
+import { useReminders } from "@/hooks/useReminders";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Switch, Text, useTheme } from "react-native-paper";
 
 export function ReminderActions({
-    isSwitchOn,
-    onToggleSwitch,
-    colorCircularIdentifier,
+    reminder,
     onEdit,
     onDelete,
     onViewALL,
 }: any) {
     const theme = useTheme();
+    const { disabledReminderById, deleteReminderById } = useReminders();
+    const [isSwitchOn, setIsSwitchOn] = useState(false);
+
+    const colorCircularIdentifier = isSwitchOn ? "#05df72" : "#939393";
+
+    const handleEdit = () => router.push(`/reminders/${reminder.id}/editar`);
+    const handleHistory = () => router.push(`/history`);
+    const handleToggleSwitch = () => {
+        if (reminder) {
+            disabledReminderById(reminder.id);
+            setIsSwitchOn((prev) => !prev)
+        }
+    };
+
+    useEffect(() => {
+        if (reminder) {
+            setIsSwitchOn(reminder.active);
+        }
+    }, [reminder, isSwitchOn]);
 
     return (
         <View style={styles.container}>
-            <ActionButton icon="pencil-outline" text="Editar Informações" onPress={onEdit} />
-            <ActionButton icon="clock-time-four" text="Ver histórico" onPress={onViewALL} />
+            <ActionButton icon="pencil-outline" text="Editar Informações" onPress={handleEdit} />
+            <ActionButton icon="clock-time-four" text="Ver histórico" onPress={handleHistory} />
             <View style={[styles.button, { backgroundColor: theme.colors.inverseOnSurface, justifyContent: "space-between" }]}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
                     <View style={[styles.circle, { backgroundColor: colorCircularIdentifier }]} />
                     <Text style={[styles.text, { color: theme.colors.onSurface }]}>Status lembrete</Text>
                 </View>
-                <Switch value={isSwitchOn} onValueChange={onToggleSwitch} color="#05df72" />
+                <Switch value={isSwitchOn} onValueChange={handleToggleSwitch} color={colorCircularIdentifier} />
             </View>
             <ActionButton icon="trash-can-outline" text="Deletar medicamento" onPress={onDelete} error />
         </View>
@@ -70,6 +89,6 @@ const styles = StyleSheet.create({
     circle: {
         width: 20,
         height: 20,
-        borderRadius: 12,
+        borderRadius: 99,
     },
 });

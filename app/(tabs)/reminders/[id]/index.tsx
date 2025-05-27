@@ -1,5 +1,5 @@
-import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import { useLocalSearchParams } from "expo-router";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
@@ -10,64 +10,20 @@ import { useDoses } from "@/hooks/useDoses";
 import { useReminders } from "@/hooks/useReminders";
 import { frequencyOptions } from "@/types/Frequency";
 import { reminderTypeToImage } from "@/types/Reminder";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { Text } from "react-native-paper";
 
 export default function ReminderDetailsById() {
   const { id } = useLocalSearchParams();
   const { getNextDose } = useDoses();
-  const { getReminderById, deleteReminder, disabledReminderById } =
+
+  const { getReminderById } =
     useReminders();
 
   const reminder = getReminderById(id as string);
   const nextDose = getNextDose(reminder?.id);
 
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const [colorCircularIdentifier, setColorCircularIdentifier] =
-    useState("#05df72");
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
-
-  useEffect(() => {
-    if (reminder) {
-      setIsSwitchOn(reminder.active);
-      setColorCircularIdentifier(reminder.active ? "#05df72" : "#939393");
-    }
-  }, [reminder]);
-
-  const handleToggleSwitch = () => {
-    if (reminder) {
-      disabledReminderById(reminder.id);
-      setIsSwitchOn((prev) => {
-        const newVal = !prev;
-        setColorCircularIdentifier(newVal ? "#05df72" : "#939393");
-        return newVal;
-      });
-    }
-  };
-
   const frequencyLabel =
     frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
-
-
-  const handleEdit = () => router.push(`/reminders/${id}/editar`);
-  const handleHistory = () => router.push(`/history`);
-
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const handleDeletePress = () => {
-    bottomSheetRef.current?.expand();
-  };
-
-  const handleConfirmDelete = () => {
-    bottomSheetRef.current?.close();
-    console.log("Medicamento deletado"); 
-  };
-
-  const handleCancelDelete = () => {
-    bottomSheetRef.current?.close();
-  }
-
   if (!reminder) return <Text style={{ margin: 20 }}>Carregando...</Text>;
 
   return (
@@ -77,14 +33,7 @@ export default function ReminderDetailsById() {
           <ReminderImage source={reminderTypeToImage[reminder.type]} width={150} height={150} />
           <ReminderInfoCard reminder={reminder} frequencyLabel={frequencyLabel} nextDose={nextDose} />
         </View>
-         <ReminderActions
-            isSwitchOn={isSwitchOn}
-            onToggleSwitch={handleToggleSwitch}
-            colorCircularIdentifier={colorCircularIdentifier}
-            onEdit={handleEdit}
-            onDelete={handleDeletePress}
-            onViewALL={handleHistory}
-          />
+        <ReminderActions reminder={reminder} />
       </View>
     </DefaultScreen >
   );

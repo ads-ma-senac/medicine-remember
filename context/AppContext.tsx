@@ -2,19 +2,18 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { dateUtils } from "@/lib/dateUtils";
 import { generateNextDoses } from "@/lib/doseUtils";
-import { scheduleMultipleNotifications } from "@/lib/scheduleMultipleNotifications";
 import { Dose } from "@/types/Dose";
 import { Reminder } from "@/types/Reminder";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Platform } from "react-native";
 
 type AppContextType = {
   reminders: Reminder[];
   doses: Dose[];
   addReminder: (reminder: Reminder) => void;
   updateReminder: (reminder: Reminder) => void;
-  deleteReminder: (reminderId: string) => void;
+  deleteReminderById: (reminderId: string) => void;
   disabledReminderById: (reminderId: string) => void;
+  updateDoses: (updateDoses: Dose[]) => void;
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -60,7 +59,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     if (!isLoading) saveDoses(doses);
   }, [doses]);
 
-  const addReminder = async (reminder: Reminder)  => {
+  const addReminder = async (reminder: Reminder) => {
     setReminders((prev) => [reminder, ...prev]);
 
     const newDoses = generateNextDoses(
@@ -72,12 +71,12 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     setDoses((prev) => [...prev, ...newDoses]);
 
-    const dates = newDoses.map( d => d.datetime);
+    const dates = newDoses.map(d => d.datetime);
 
-    if(Platform.OS == "android" || Platform.OS == "ios") {
-      await scheduleMultipleNotifications(dates)
-    } 
-    
+    // if (Platform.OS == "android" || Platform.OS == "ios") {
+    //   await scheduleMultipleNotifications(dates)
+    // }
+
   };
 
   const updateReminder = (reminder: Reminder) => {
@@ -108,7 +107,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   };
 
-  const deleteReminder = (reminderId: string) => {
+  const updateDoses = (updateDoses: Dose[]) => { setDoses([...updateDoses]); };
+
+  const deleteReminderById = (reminderId: string) => {
     const filterReminders = reminders.filter((r) => r.id !== reminderId);
     const filterDoses = doses.filter((d) => d.reminderId !== reminderId);
     setReminders([...filterReminders]);
@@ -146,9 +147,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         reminders,
         doses,
         addReminder,
-        deleteReminder,
+        deleteReminderById,
         updateReminder,
         disabledReminderById,
+        updateDoses
       }}
     >
       {children}

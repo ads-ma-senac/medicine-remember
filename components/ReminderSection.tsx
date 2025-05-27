@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 
 import { Reminder } from "@/types/Reminder";
 import React from "react";
-import { Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { EmptyState } from "./EmptyState";
 import ReminderCard from "./ReminderCard";
 
@@ -15,9 +15,10 @@ export default function ReminderSection({
   title,
   reminders,
 }: ReminderSectionProps) {
+  const theme = useTheme();
   return (
     <View style={styles.section}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, { color: theme.colors.onSurface }]}>{title}</Text>
       {
         reminders.length === 0 ? (
           <EmptyState />
@@ -45,5 +46,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 12,
+    textAlign: "center",
   },
 });

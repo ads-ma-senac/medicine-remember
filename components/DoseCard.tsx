@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Switch, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 
 import { ReminderImage } from "@/components/ReminderImage";
 import { useReminders } from "@/hooks/useReminders";
@@ -49,11 +49,15 @@ export default function DoseCard({ dose }: { dose: Dose }) {
               {reminder.name}
             </Text>
             <Text style={[styles.text, { color: theme.colors.onSurface }]}>
-              {dateUtils.formatDistance(dose.datetime)}
+              {dateUtils.formatDateTime(dose.datetime)}
             </Text>
           </View>
         </View>
-        <Switch value={isSwitchOn} onValueChange={handleToggleSwitch} color="#05df72" />
+        <View>
+          <Text style={[styles.text, { color: theme.colors.onSurface }]}>
+            {dose.taken ? "Tomado" : "Não tomado"}
+          </Text>
+        </View>
       </View>
     </View>
   );

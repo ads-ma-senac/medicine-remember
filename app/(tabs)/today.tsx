@@ -10,37 +10,43 @@ import { useEffect, useState } from "react";
 
 export default function Reminders() {
     const theme = useTheme();
-    const { getTodayDoses } = useDoses();
+    const { getVisibleDosesWithinNext24Hours, markAllDosesAsTaken } = useDoses();
 
     const [doses, setDoses] = useState<Dose[]>([]);
 
     useEffect(() => {
         const fetchDoses = async () => {
-            const todayDoses = getTodayDoses();
+            const todayDoses = getVisibleDosesWithinNext24Hours();
             setDoses(todayDoses);
         };
         fetchDoses();
     }, []);
 
+    const handleConfirmAll = () => markAllDosesAsTaken();
 
     return (
         <DefaultScreen>
             <View style={styles.container}>
                 <Text style={styles.title}>Hoje</Text>
-                <TouchableOpacity style={{ backgroundColor: theme.colors.tertiaryContainer, padding: 16, borderRadius: 8 }}>
-                    <Text style={{ fontSize: 18, fontWeight: "700", textAlign: "center" }}>
+                <TouchableOpacity
+                    onPress={handleConfirmAll}
+                    style={[styles.buttonContainer, { backgroundColor: theme.colors.onPrimaryContainer }]}>
+                    <Text style={{ fontSize: 18, fontWeight: "700", textAlign: "center", color: theme.colors.onPrimary }}>
                         Confirmar todos os remédios
                     </Text>
                 </TouchableOpacity>
                 {
                     doses.length === 0 ? (
-                        <EmptyState title="" messagem="" />
+                        <EmptyState
+                            title="Nenhuma dose hoje"
+                            messagem="Não há doses programadas para as próximas 24 horas."
+                        />
                     ) : (
                         <View style={styles.section}>
                             <FlatList
                                 data={doses}
                                 keyExtractor={(item) => item.id}
-                                renderItem={({ item }) => <DoseCard dose={item} />}
+                                renderItem={({ item }: { item: Dose }) => <DoseCard dose={item} />}
                                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                                 showsVerticalScrollIndicator={false}
                             />
@@ -71,4 +77,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginTop: 16,
     },
+    buttonContainer: {
+        padding: 16,
+        borderRadius: 8
+    }
 });

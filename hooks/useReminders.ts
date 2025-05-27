@@ -7,7 +7,7 @@ interface UseRemindersReturn {
   getReminderById: (reminderId: string) => Reminder | undefined;
   addReminder: (reminder: Reminder) => void;
   updateReminder: (reminder: Reminder) => void;
-  deleteReminder: (reminderId: string) => void;
+  deleteReminderById: (reminderId: string) => void;
   disabledReminderById: (reminderId: string) => void;
 }
 
@@ -16,7 +16,7 @@ export const useReminders = (): UseRemindersReturn => {
     reminders = [],
     addReminder,
     updateReminder,
-    deleteReminder,
+    deleteReminderById,
     disabledReminderById,
   } = useAppContext();
 
@@ -42,7 +42,7 @@ export const useReminders = (): UseRemindersReturn => {
     getLastActiveReminders,
     addReminder,
     updateReminder,
-    deleteReminder,
+    deleteReminderById,
     disabledReminderById,
   };
 };
