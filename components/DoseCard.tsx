@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 import { ReminderImage } from "@/components/ReminderImage";
@@ -9,11 +9,10 @@ import { Dose } from "@/types/Dose";
 import { Reminder, reminderTypeToImage } from "@/types/Reminder";
 import { router } from "expo-router";
 
-export default function DoseCard({ dose }: { dose: Dose }) {
+export default function DoseCard({ dose, onLongPress }: { dose: Dose, onLongPress?: () => void }) {
   const theme = useTheme();
   const { getReminderById } = useReminders();
 
-  const [isSwitchOn, setIsSwitchOn] = useState(dose.taken);
   const [reminder, setReminder] = useState<Reminder | null>(null);
 
   useEffect(() => {
@@ -25,22 +24,18 @@ export default function DoseCard({ dose }: { dose: Dose }) {
     setReminder(foundReminder);
   }, [dose.reminderId]);
 
-  useEffect(() => {
-    setIsSwitchOn(dose.taken);
-  }, [dose.taken]);
-
   const imageSource = useMemo(() => {
     return reminder ? reminderTypeToImage[reminder.type] : undefined;
   }, [reminder]);
 
-  const handleToggleSwitch = () => {
-    setIsSwitchOn((prev) => !prev);
-  };
-
   if (!reminder) return null;
 
+
+
   return (
-    <View style={[styles.cardContainer, { backgroundColor: theme.colors.primaryContainer }]}>
+    <TouchableOpacity
+      onLongPress={onLongPress}
+      style={[styles.cardContainer, { backgroundColor: theme.colors.primaryContainer }]}>
       <View style={styles.cardDetailsContainer}>
         <View style={styles.row}>
           <ReminderImage width={46} height={46} source={imageSource} />
@@ -59,7 +54,7 @@ export default function DoseCard({ dose }: { dose: Dose }) {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

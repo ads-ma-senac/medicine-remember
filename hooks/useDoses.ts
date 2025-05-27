@@ -48,5 +48,5 @@ export const useDoses = () => {
     updateDoses(dosesTake);
   };
 
-  return { doses, upcomingDoses24h, getNextDose, getAllActiveDoses, getHistoryDoses, markAllDosesAsTaken, getVisibleDosesWithinNext24Hours };
+  return { doses, upcomingDoses24h, getNextDose, getAllActiveDoses, getHistoryDoses, markAllDosesAsTaken, markDoseAsTaken, getVisibleDosesWithinNext24Hours };
 };

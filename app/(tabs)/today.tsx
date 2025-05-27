@@ -13,7 +13,7 @@ export default function Reminders() {
     const theme = useTheme();
     const ConfettiRef = useRef<ConfettiMethods>(null);
 
-    const { getVisibleDosesWithinNext24Hours, markAllDosesAsTaken, doses } = useDoses();
+    const { getVisibleDosesWithinNext24Hours, markAllDosesAsTaken, markDoseAsTaken, doses } = useDoses();
 
     const [visibleDosesPending, setVisibleDosesPending] = useState<Dose[]>([]);
 
@@ -29,6 +29,11 @@ export default function Reminders() {
         ConfettiRef.current?.restart();
         markAllDosesAsTaken();
     };
+
+    const handleConfirmDose = (doseId: string) => {
+        ConfettiRef.current?.restart();
+        markDoseAsTaken(doseId);
+    }
 
     const disabledButton = visibleDosesPending.length === 0;
 
@@ -56,7 +61,7 @@ export default function Reminders() {
                             <FlatList
                                 data={visibleDosesPending}
                                 keyExtractor={(item) => item.id}
-                                renderItem={({ item }: { item: Dose }) => <DoseCard dose={item} />}
+                                renderItem={({ item }: { item: Dose }) => <DoseCard dose={item} onLongPress={() => handleConfirmDose(item.id)} />}
                                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                                 showsVerticalScrollIndicator={false}
                             />
