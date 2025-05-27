@@ -11,7 +11,7 @@ import { dosaFormat } from "@/lib/doseUtils";
 import { frequencyOptions } from "@/types/Frequency";
 import { router } from "expo-router";
 
-export default function ReminderCard({reminder}: { reminder: Reminder }) {
+export default function ReminderCard({ reminder }: { reminder: Reminder }) {
     const theme = useTheme();
     const { getNextDose } = useDoses();
 
@@ -30,12 +30,12 @@ export default function ReminderCard({reminder}: { reminder: Reminder }) {
         <TouchableOpacity
             style={[
                 styles.cardContainer,
-                {backgroundColor: theme.colors.primaryContainer},
+                { backgroundColor: theme.colors.primaryContainer },
             ]}
             onPress={handlePress}
         >
-            <View style={{width: 40, height: 40}}>
-                <Image style={styles.image} source={imageSource}/>
+            <View style={{ width: 40, height: 40 }}>
+                <Image style={styles.image} source={imageSource} />
             </View>
             <View style={styles.cardDetailsContainer}>
                 <View style={styles.cardDetails}>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     cardTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: "bold",
     },
     cardText: {

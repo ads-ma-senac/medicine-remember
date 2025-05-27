@@ -19,6 +19,7 @@ export function ReminderActions({
 
     const handleEdit = () => router.push(`/reminders/${reminder.id}/editar`);
     const handleHistory = () => router.push(`/history`);
+    const handleDelete = () => { deleteReminderById(reminder.id); router.push("/reminders") };
     const handleToggleSwitch = () => {
         if (reminder) {
             disabledReminderById(reminder.id);
@@ -43,7 +44,7 @@ export function ReminderActions({
                 </View>
                 <Switch value={isSwitchOn} onValueChange={handleToggleSwitch} color={colorCircularIdentifier} />
             </View>
-            <ActionButton icon="trash-can-outline" text="Deletar medicamento" onPress={onDelete} error />
+            <ActionButton icon="trash-can-outline" text="Deletar medicamento" onPress={handleDelete} error />
         </View>
     );
 }

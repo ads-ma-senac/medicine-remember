@@ -6,37 +6,47 @@ import DoseCard from "@/components/DoseCard";
 import { EmptyState } from "@/components/EmptyState";
 import { useDoses } from "@/hooks/useDoses";
 import { Dose } from "@/types/Dose";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ConfettiMethods, PIConfetti } from 'react-native-fast-confetti';
 
 export default function Reminders() {
     const theme = useTheme();
-    const { getVisibleDosesWithinNext24Hours, markAllDosesAsTaken } = useDoses();
+    const ConfettiRef = useRef<ConfettiMethods>(null);
 
-    const [doses, setDoses] = useState<Dose[]>([]);
+    const { getVisibleDosesWithinNext24Hours, markAllDosesAsTaken, doses } = useDoses();
+
+    const [visibleDosesPending, setVisibleDosesPending] = useState<Dose[]>([]);
 
     useEffect(() => {
         const fetchDoses = async () => {
-            const todayDoses = getVisibleDosesWithinNext24Hours();
-            setDoses(todayDoses);
+            const visibleDoses = getVisibleDosesWithinNext24Hours();
+            setVisibleDosesPending(visibleDoses);
         };
         fetchDoses();
-    }, []);
+    }, [doses]);
 
-    const handleConfirmAll = () => markAllDosesAsTaken();
+    const handleConfirmAll = () => {
+        ConfettiRef.current?.restart();
+        markAllDosesAsTaken();
+    };
+
+    const disabledButton = visibleDosesPending.length === 0;
 
     return (
         <DefaultScreen>
             <View style={styles.container}>
+                <PIConfetti ref={ConfettiRef} autoplay={false} fadeOutOnEnd count={300} />
                 <Text style={styles.title}>Hoje</Text>
                 <TouchableOpacity
                     onPress={handleConfirmAll}
-                    style={[styles.buttonContainer, { backgroundColor: theme.colors.onPrimaryContainer }]}>
+                    disabled={disabledButton}
+                    style={[styles.buttonContainer, { backgroundColor: disabledButton ? theme.colors.outline : theme.colors.onPrimaryContainer }]}>
                     <Text style={{ fontSize: 18, fontWeight: "700", textAlign: "center", color: theme.colors.onPrimary }}>
                         Confirmar todos os remédios
                     </Text>
                 </TouchableOpacity>
                 {
-                    doses.length === 0 ? (
+                    visibleDosesPending.length === 0 ? (
                         <EmptyState
                             title="Nenhuma dose hoje"
                             messagem="Não há doses programadas para as próximas 24 horas."
@@ -44,7 +54,7 @@ export default function Reminders() {
                     ) : (
                         <View style={styles.section}>
                             <FlatList
-                                data={doses}
+                                data={visibleDosesPending}
                                 keyExtractor={(item) => item.id}
                                 renderItem={({ item }: { item: Dose }) => <DoseCard dose={item} />}
                                 ItemSeparatorComponent={() => <View style={{ height: 12 }} />}

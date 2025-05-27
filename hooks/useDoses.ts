@@ -23,7 +23,8 @@ export const useDoses = () => {
 
   const getAllActiveDoses = (): Dose[] => doses.filter((d) => d.visibility);
   const getHistoryDoses = (): Dose[] => doses.filter((d) => (d.visibility && dateUtils.isBeforeNow(d.datetime)) || d.taken);
-  const getVisibleDosesWithinNext24Hours = (): Dose[] => doses.filter((d) => dateUtils.isWithinNextHours(d.datetime, 24) && d.visibility);
+  const getVisibleDosesWithinNext24Hours = (): Dose[] => doses.filter((d) => dateUtils.isWithinNextHours(d.datetime, 24) && d.visibility && !d.taken);
+
   const markDoseAsTaken = (doseId: string) => {
     const updatedDoses = doses.map((dose) => {
       if (dose.id === doseId) {
@@ -31,9 +32,9 @@ export const useDoses = () => {
       }
       return dose;
     });
-
     updateDoses(updatedDoses);
   };
+
   const markAllDosesAsTaken = () => {
     const dosesTake = doses.map((d) => {
       if (dateUtils.isWithinNextHours(d.datetime, 24) && d.visibility && !d.taken) {

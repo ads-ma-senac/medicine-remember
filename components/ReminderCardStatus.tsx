@@ -17,8 +17,6 @@ export default function ReminderCardStatus({ reminder }: { reminder: Reminder })
 
     const imageSource = reminderTypeToImage[reminder.type];
 
-    const colorStatusBadge = reminder.active ? "#05df72" : "#939393";
-
     const handlePress = () => {
         router.push(`/reminders/${reminder.id}`);
     }
@@ -39,7 +37,7 @@ export default function ReminderCardStatus({ reminder }: { reminder: Reminder })
                     <Text style={[styles.cardTitle]}>
                         {capitalizeFirstLetter(reminder.name)}
                     </Text>
-                    <View style={[styles.badge, { backgroundColor: colorStatusBadge }]} >
+                    <View style={[styles.badge, { backgroundColor: theme.colors.background }]} >
                         <Text style={[styles.cardText, { color: theme.colors.onSurface }]}>{reminder.active ? "Ativo" : "Pausado"}</Text>
                     </View>
                 </View>
