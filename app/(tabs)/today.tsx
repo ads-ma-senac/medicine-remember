@@ -26,6 +26,7 @@ export default function Reminders() {
     }, [doses]);
 
     const handleConfirmAll = () => {
+        console.log(ConfettiRef.current)
         ConfettiRef.current?.restart();
         markAllDosesAsTaken();
     };

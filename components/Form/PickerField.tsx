@@ -29,31 +29,31 @@ export default function FormPicker({
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={{ borderRadius: 8, overflow: "hidden", width: "100%" }}>
-        <Picker
-          selectedValue={value}
-          onValueChange={onChange}
-          itemStyle={{ height: 62 }}
-          style={[
-            styles.picker,
-            {
-              backgroundColor: theme.colors.primaryContainer,
-              color: theme.colors.onSurface,
-              width: "100%",
-            },
-            style,
-          ]}
-        >
-          {options.map((opt) => (
-            <Picker.Item
-              key={opt.value}
-              label={opt.label}
-              value={opt.value}
-              style={{ fontSize: 18 }}
-            />
-          ))}
-        </Picker>
-      </View>
+      <Picker
+        selectedValue={value}
+        onValueChange={onChange}
+        itemStyle={{ height: 62, backgroundColor: theme.colors.primaryContainer, }}
+        style={[
+          styles.picker,
+          {
+            backgroundColor: theme.colors.primaryContainer,
+            color: theme.colors.onSurface,
+            width: "100%",
+            borderRadius: 8
+          },
+          style,
+        ]}
+      >
+        {options.map((opt) => (
+          <Picker.Item
+            key={opt.value}
+            label={opt.label}
+            value={opt.value}
+            style={{ fontSize: 18 }}
+
+          />
+        ))}
+      </Picker>
     </View>
   );
 }

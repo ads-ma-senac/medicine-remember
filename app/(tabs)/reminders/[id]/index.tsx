@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
 import { ReminderActions } from "@/components/ReminderActions";
@@ -26,11 +26,12 @@ export default function ReminderDetailsById() {
     frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
   if (!reminder) return <Text style={{ margin: 20 }}>Carregando...</Text>;
 
+  const imgSize = Platform.OS === "ios" ? 120 : 150
   return (
     <DefaultScreen>
       <View style={styles.container}>
         <View style={{ width: "100%", marginBottom: 16 }}>
-          <ReminderImage source={reminderTypeToImage[reminder.type]} width={150} height={150} />
+          <ReminderImage source={reminderTypeToImage[reminder.type]} width={imgSize} height={imgSize} />
           <ReminderInfoCard reminder={reminder} frequencyLabel={frequencyLabel} nextDose={nextDose} />
         </View>
         <ReminderActions reminder={reminder} />
