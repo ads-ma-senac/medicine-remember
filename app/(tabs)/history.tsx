@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { SegmentedButtons, Text, useTheme } from "react-native-paper";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
-import DoseCard from "@/components/DoseCard";
+import DoseCardHistory from "@/components/DoseCardHistory";
 import { EmptyState } from "@/components/EmptyState";
 import { useDoses } from "@/hooks/useDoses";
 import { dateUtils } from "@/lib/dateUtils";
@@ -29,11 +29,11 @@ export default function History() {
   const dosesFiltered = useMemo(() => {
     switch (value) {
       case "day":
-        return doses.filter(dose => dateUtils.isToday(dose.datetime));
+        return doses.filter((dose) => dateUtils.isToday(dose.datetime));
       case "week":
-        return doses.filter(dose => dateUtils.isWeek(dose.datetime));
+        return doses.filter((dose) => dateUtils.isWeek(dose.datetime));
       case "month":
-        return doses.filter(dose => dateUtils.isMonth(dose.datetime));
+        return doses.filter((dose) => dateUtils.isMonth(dose.datetime));
       default:
         return doses;
     }
@@ -46,16 +46,43 @@ export default function History() {
           <Text style={styles.title}>Histórico</Text>
           <Text style={styles.subtitle}>Acompanhe seus medicamentos</Text>
         </View>
-        <View style={[styles.filterContainer, { backgroundColor: theme.colors.primaryContainer }]}>
+        <View
+          style={[
+            styles.filterContainer,
+            { backgroundColor: theme.colors.primaryContainer },
+          ]}
+        >
           <SegmentedButtons
             value={value}
             onValueChange={setValue}
-            style={[{ backgroundColor: theme.colors.background, borderRadius: 8 }]}
+            style={[
+              { backgroundColor: theme.colors.background, borderRadius: 8 },
+            ]}
             buttons={[
-              { value: "day", label: "Dia", labelStyle: styles.buttonLabel, style: styles.segmentedButtonRight },
-              { value: "week", label: "Semana", labelStyle: styles.buttonLabel, style: styles.segmentedButton },
-              { value: "month", label: "Mês", labelStyle: styles.buttonLabel, style: styles.segmentedButton },
-              { value: "all", label: "Tudo", labelStyle: styles.buttonLabel, style: styles.segmentedButtonLeft },
+              {
+                value: "day",
+                label: "Dia",
+                labelStyle: styles.buttonLabel,
+                style: styles.segmentedButtonRight,
+              },
+              {
+                value: "week",
+                label: "Semana",
+                labelStyle: styles.buttonLabel,
+                style: styles.segmentedButton,
+              },
+              {
+                value: "month",
+                label: "Mês",
+                labelStyle: styles.buttonLabel,
+                style: styles.segmentedButton,
+              },
+              {
+                value: "all",
+                label: "Tudo",
+                labelStyle: styles.buttonLabel,
+                style: styles.segmentedButtonLeft,
+              },
             ]}
           />
         </View>
@@ -69,7 +96,7 @@ export default function History() {
             <FlatList
               data={dosesFiltered}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => <DoseCard dose={item} />}
+              renderItem={({ item }) => <DoseCardHistory dose={item} />}
               ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
               showsVerticalScrollIndicator={false}
             />
@@ -108,7 +135,7 @@ const styles = StyleSheet.create({
     padding: 4,
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   },
   buttonLabel: {
     fontWeight: "bold",
@@ -120,7 +147,7 @@ const styles = StyleSheet.create({
     padding: 4,
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   },
   segmentedButtonLeft: {
     borderBottomEndRadius: 8,
@@ -128,7 +155,6 @@ const styles = StyleSheet.create({
     padding: 4,
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   },
-
 });

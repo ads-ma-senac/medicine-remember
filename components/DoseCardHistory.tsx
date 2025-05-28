@@ -1,6 +1,6 @@
 import { Reminder, reminderTypeToImage } from "@/types/Reminder";
 import React, { useEffect, useMemo, useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 import { ReminderImage } from "@/components/ReminderImage";
@@ -9,13 +9,7 @@ import { dateUtils } from "@/lib/dateUtils";
 import { Dose } from "@/types/Dose";
 import { router } from "expo-router";
 
-export default function DoseCard({
-  dose,
-  onLongPress,
-}: {
-  dose: Dose;
-  onLongPress?: () => void;
-}) {
+export default function DoseCardHistory({ dose }: { dose: Dose }) {
   const theme = useTheme();
   const { getReminderById } = useReminders();
 
@@ -37,8 +31,7 @@ export default function DoseCard({
   if (!reminder) return null;
 
   return (
-    <TouchableOpacity
-      onLongPress={onLongPress}
+    <View
       style={[
         styles.cardContainer,
         { backgroundColor: theme.colors.primaryContainer },
@@ -61,8 +54,13 @@ export default function DoseCard({
             </Text>
           </View>
         </View>
+        <View>
+          <Text style={[styles.text, { color: theme.colors.onSurface }]}>
+            {dose.taken ? "Tomado" : "Não tomado"}
+          </Text>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
