@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import React, { Ref } from "react";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { ReactNode, Ref } from "react";
+import { StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 import { images } from "@/constants/images";
@@ -8,19 +8,21 @@ import { Image } from "expo-image";
 
 interface DeleteBottonSheetProps {
   ref: Ref<BottomSheet>;
+  children: ReactNode;
 }
 
-export default function DeleteBottonSheet({ ref }: DeleteBottonSheetProps) {
+export default function DeleteBottonSheet({ ref,children }: DeleteBottonSheetProps) {
   const theme = useTheme();
   const snapPoints = ['25%', '50%', '90%'];
+
   return (
     <BottomSheet
       ref={ref}
-      index={0}
+      index={-1}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
-      style={{ flex: 1 }}
-      backgroundStyle={{ backgroundColor: "red" }}
+      style={styles.container}
+      backgroundStyle={{ backgroundColor: theme.colors.background }}
     >
       <BottomSheetView style={styles.contentContainer}>
         <View style={{ alignItems: "center" }}>
@@ -40,31 +42,7 @@ export default function DeleteBottonSheet({ ref }: DeleteBottonSheetProps) {
             paddingLeft: 24,
           }}
         >
-          <TouchableOpacity
-            style={[
-              styles.button,
-              { backgroundColor: theme.colors.errorContainer },
-            ]}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                {
-                  color: theme.colors.error,
-                },
-              ]}
-            >
-              Deletar lembrete
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              { backgroundColor: theme.colors.outlineVariant },
-            ]}
-          >
-            <Text style={[styles.buttonText]}>Cancelar</Text>
-          </TouchableOpacity>
+       {children}
         </View>
       </BottomSheetView>
     </BottomSheet>
@@ -78,8 +56,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    paddingTop: 12,
-    paddingBottom: 40,
+    paddingTop: 16,
+    paddingBottom: 32,
     alignItems: "center",
     gap: 24,
   },
@@ -89,21 +67,6 @@ const styles = StyleSheet.create({
   },
   textSubtitle: {
     fontWeight: "600",
-    fontSize: 18,
-  },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 8,
-    padding: 16,
-    width: "100%",
-    height: Platform.OS === "ios" ? 54 : 62,
-    gap: 8,
-  },
-  buttonText: {
-    flex: 1,
-    textAlign: "center",
-    fontWeight: "700",
     fontSize: 18,
   },
 });

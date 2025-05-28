@@ -27,23 +27,23 @@ export default function ReminderDetailsById() {
 
   const imgSize = Platform.OS === "ios" ? 120 : 150;
   return (
-    <DefaultScreen>
-      <View style={styles.container}>
-        <View style={{ width: "100%", marginBottom: 16 }}>
-          <ReminderImage
-            source={reminderTypeToImage[reminder.type]}
-            width={imgSize}
-            height={imgSize}
-          />
-          <ReminderInfoCard
-            reminder={reminder}
-            frequencyLabel={frequencyLabel}
-            nextDose={nextDose}
-          />
+      <DefaultScreen>
+        <View style={styles.container}>
+          <View style={{ width: "100%", marginBottom: 16 }}>
+            <ReminderImage
+              source={reminderTypeToImage[reminder.type]}
+              width={imgSize}
+              height={imgSize}
+            />
+            <ReminderInfoCard
+              reminder={reminder}
+              frequencyLabel={frequencyLabel}
+              nextDose={nextDose}
+            />
+          </View>
+          <ReminderActions reminder={reminder} />
         </View>
-        <ReminderActions reminder={reminder} />
-      </View>
-    </DefaultScreen>
+      </DefaultScreen>
   );
 }
 

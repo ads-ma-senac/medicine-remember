@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Switch, Text, useTheme } from "react-native-paper";
 
@@ -6,7 +6,7 @@ import { useReminders } from "@/hooks/useReminders";
 import { Reminder } from "@/types/Reminder";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import DeleteBottonSheet from "./DeleteBottonSheet";
 
 interface ReminderActionsProps {
@@ -48,8 +48,14 @@ export function ReminderActions({ reminder }: ReminderActionsProps) {
     }
   }, [reminder]);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => bottomSheetRef.current?.close()
+    }, [])
+  );
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { flex: 1, backgroundColor: theme.colors.background }]}>
       <ActionButton
         icon="pencil-outline"
         text="Editar Informações"
@@ -92,7 +98,35 @@ export function ReminderActions({ reminder }: ReminderActionsProps) {
         onPress={handleDelete}
         error
       />
-      <DeleteBottonSheet ref={bottomSheetRef} />
+      <DeleteBottonSheet ref={bottomSheetRef}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { backgroundColor: theme.colors.errorContainer },
+          ]}
+          onPress={handleConfirmDelete}
+        >
+          <Text
+            style={[
+              styles.buttonText,
+              {
+                color: theme.colors.error,
+              },
+            ]}
+          >
+            Deletar lembrete
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            { backgroundColor: theme.colors.outlineVariant },
+          ]}
+          onPress={handleCancelDelete}
+        >
+          <Text style={[styles.buttonText]}>Cancelar</Text>
+        </TouchableOpacity>
+      </DeleteBottonSheet>
     </View>
   );
 }
@@ -175,5 +209,11 @@ const styles = StyleSheet.create({
   bottomSheetButtonText: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  buttonText: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "700",
+    fontSize: 18,
   },
 });
