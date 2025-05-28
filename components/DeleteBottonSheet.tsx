@@ -11,7 +11,7 @@ interface DeleteBottonSheetProps {
   children: ReactNode;
 }
 
-export default function DeleteBottonSheet({ ref,children }: DeleteBottonSheetProps) {
+export default function DeleteBottonSheet({ ref, children }: DeleteBottonSheetProps) {
   const theme = useTheme();
   const snapPoints = ['25%', '50%', '90%'];
 
@@ -21,10 +21,11 @@ export default function DeleteBottonSheet({ ref,children }: DeleteBottonSheetPro
       index={-1}
       snapPoints={snapPoints}
       enablePanDownToClose={true}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: "transparent" }]}
+      handleIndicatorStyle={{ backgroundColor: theme.colors.primary }}
       backgroundStyle={{ backgroundColor: theme.colors.background }}
     >
-      <BottomSheetView style={styles.contentContainer}>
+      <BottomSheetView style={[styles.contentContainer]}>
         <View style={{ alignItems: "center" }}>
           <Image source={images.trash} style={{ width: 120, height: 120 }} />
           <Text style={[styles.textTitle]}>Tchau, lembrete?</Text>
@@ -42,10 +43,10 @@ export default function DeleteBottonSheet({ ref,children }: DeleteBottonSheetPro
             paddingLeft: 24,
           }}
         >
-       {children}
+          {children}
         </View>
       </BottomSheetView>
-    </BottomSheet>
+    </ BottomSheet>
   );
 }
 
