@@ -66,9 +66,7 @@ export default function AddReminder() {
     router.push("/");
   };
 
-  const toggleDatepicker = () => {
-    setShowPicker(!showPicker);
-  };
+
   return (
     <DefaultScreen>
       <KeyboardAvoidingView
@@ -137,7 +135,7 @@ export default function AddReminder() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 24,
+    gap: 16,
     paddingTop: 40,
     paddingBottom: 8,
     paddingLeft: 24,
@@ -146,7 +144,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flexDirection: "column",
-    gap: 12,
+    gap: 8,
   },
   title: {
     fontSize: 24,

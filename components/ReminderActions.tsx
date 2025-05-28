@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Switch, Text, useTheme } from "react-native-paper";
 
 import { useReminders } from "@/hooks/useReminders";
@@ -162,18 +162,17 @@ function ActionButton({
 }
 
 const styles = StyleSheet.create({
-  container: { width: "100%", gap: 6 },
+  container: { width: "100%", gap: 8 },
   button: {
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 8,
-    padding: 16,
+    padding: 12,
     width: "100%",
-    height: Platform.OS === "ios" ? 54 : 62,
     gap: 8,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
   },
   circle: {

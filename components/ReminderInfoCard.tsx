@@ -34,18 +34,17 @@ const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         width: "100%",
-        gap: 12,
+        gap: 8,
     },
     title: {
-        fontSize: 38,
+        fontSize: 32,
         fontWeight: "bold",
         textAlign: "center",
     },
     card: {
         borderRadius: 8,
-        padding: 16,
+        padding: 12,
         width: "100%",
-        height: 56,
         justifyContent: "center",
     },
     text: {

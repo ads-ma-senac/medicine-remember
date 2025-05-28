@@ -25,25 +25,26 @@ export default function ReminderDetailsById() {
     frequencyOptions.find((f) => f.value === reminder?.frequency)?.label ?? "-";
   if (!reminder) return <Text style={{ margin: 20 }}>Carregando...</Text>;
 
-  const imgSize = Platform.OS === "ios" ? 120 : 150;
+  const imgSize = Platform.OS === "ios" ? 116 : 124;
+
   return (
-      <DefaultScreen>
-        <View style={styles.container}>
-          <View style={{ width: "100%", marginBottom: 16 }}>
-            <ReminderImage
-              source={reminderTypeToImage[reminder.type]}
-              width={imgSize}
-              height={imgSize}
-            />
-            <ReminderInfoCard
-              reminder={reminder}
-              frequencyLabel={frequencyLabel}
-              nextDose={nextDose}
-            />
-          </View>
-          <ReminderActions reminder={reminder} />
+    <DefaultScreen>
+      <View style={styles.container}>
+        <View style={{ width: "100%" }}>
+          <ReminderImage
+            source={reminderTypeToImage[reminder.type]}
+            width={imgSize}
+            height={imgSize}
+          />
+          <ReminderInfoCard
+            reminder={reminder}
+            frequencyLabel={frequencyLabel}
+            nextDose={nextDose}
+          />
         </View>
-      </DefaultScreen>
+        <ReminderActions reminder={reminder} />
+      </View>
+    </DefaultScreen>
   );
 }
 
@@ -52,6 +53,6 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: "center",
     flex: 1,
-    gap: 16,
+    gap: 24,
   },
 });
