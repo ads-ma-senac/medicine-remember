@@ -61,6 +61,7 @@ export default function FormPicker({
 const styles = StyleSheet.create({
   container: {
     gap: 8,
+    borderRadius: 12,
   },
   label: {
     fontSize: 18,
