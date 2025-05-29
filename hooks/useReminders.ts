@@ -30,8 +30,7 @@ export const useReminders = (): UseRemindersReturn => {
         const bDate = new Date(b.createdAt);
         return bDate.getTime() - aDate.getTime();
       })
-      .slice(-5)
-      .reverse();
+      .slice(-5);
   };
   const getReminderById = (reminderId: string): Reminder | undefined =>
     reminders.find((r) => r.id === reminderId);
