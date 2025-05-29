@@ -43,7 +43,7 @@ export function generateNextDoses(
 
   doses.push({
     id: Crypto.randomUUID(),
-    datetime: dateUtils.addSeconds(current, 60),
+    datetime: dateUtils.addSeconds(new Date(), 60),
     reminderId,
     taken: false,
     visibility: true,
