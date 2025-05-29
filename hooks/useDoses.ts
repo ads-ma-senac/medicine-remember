@@ -1,6 +1,6 @@
-import { useAppContext } from "@/context/AppContext";
-import { dateUtils } from "@/lib/dateUtils";
 import { Dose } from "@/types/Dose";
+import { dateUtils } from "@/lib/dateUtils";
+import { useAppContext } from "@/context/AppContext";
 
 export const useDoses = () => {
   const { doses = [], updateDoses } = useAppContext();
@@ -22,8 +22,11 @@ export const useDoses = () => {
   };
 
   const getAllActiveDoses = (): Dose[] => doses.filter((d) => d.visibility);
-  const getHistoryDoses = (): Dose[] => doses.filter((d) => (d.visibility && dateUtils.isBeforeNow(d.datetime)) || d.taken);
-  const getVisibleDosesToday = (): Dose[] => doses.filter((d) => dateUtils.isToday(d.datetime) && d.visibility && !d.taken);
+
+  const getVisibleDosesToday = (): Dose[] =>
+    doses.filter(
+      (d) => dateUtils.isToday(d.datetime) && d.visibility && !d.taken
+    );
 
   const markDoseAsTaken = (doseId: string) => {
     const updatedDoses = doses.map((dose) => {
@@ -37,16 +40,28 @@ export const useDoses = () => {
 
   const markAllDosesAsTaken = () => {
     const dosesTake = doses.map((d) => {
-      if (dateUtils.isWithinNextHours(d.datetime, 24) && d.visibility && !d.taken) {
+      if (
+        dateUtils.isWithinNextHours(d.datetime, 24) &&
+        d.visibility &&
+        !d.taken
+      ) {
         return { ...d, taken: true };
       }
       return {
         ...d,
       };
-    })
+    });
 
     updateDoses(dosesTake);
   };
 
-  return { doses, upcomingDoses24h, getNextDose, getAllActiveDoses, getHistoryDoses, markAllDosesAsTaken, markDoseAsTaken, getVisibleDosesToday };
+  return {
+    doses,
+    upcomingDoses24h,
+    getNextDose,
+    getAllActiveDoses,
+    markAllDosesAsTaken,
+    markDoseAsTaken,
+    getVisibleDosesToday,
+  };
 };

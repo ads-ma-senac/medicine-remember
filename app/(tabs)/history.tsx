@@ -1,43 +1,42 @@
-import { useEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { SegmentedButtons, Text, useTheme } from "react-native-paper";
+import { useEffect, useMemo, useState } from "react";
 
 import { DefaultScreen } from "@/components/DefaultScreen";
+import { Dose } from "@/types/Dose";
 import DoseCardHistory from "@/components/DoseCardHistory";
 import { EmptyState } from "@/components/EmptyState";
-import { useDoses } from "@/hooks/useDoses";
 import { dateUtils } from "@/lib/dateUtils";
-import { Dose } from "@/types/Dose";
+import { useDoses } from "@/hooks/useDoses";
 
 type FilterPeriod = "day" | "week" | "month" | "all";
 
 export default function History() {
   const theme = useTheme();
-  const { getHistoryDoses } = useDoses();
+  const { doses } = useDoses();
 
   const [value, setValue] = useState<FilterPeriod>("all");
-  const [doses, setDoses] = useState<Dose[]>([]);
+  const [historyDoses, setHistoryDoses] = useState<Dose[]>([]);
 
   useEffect(() => {
-    const fetchDoses = async () => {
-      const historyDoses = getHistoryDoses();
-      setDoses(historyDoses);
-    };
-    fetchDoses();
-  }, []);
+    const getHistoryDoses = doses.filter(
+      (d) => (d.visibility && dateUtils.isBeforeNow(d.datetime)) || d.taken
+    );
+    setHistoryDoses(getHistoryDoses);
+  }, [doses]);
 
   const dosesFiltered = useMemo(() => {
     switch (value) {
       case "day":
-        return doses.filter((dose) => dateUtils.isToday(dose.datetime));
+        return historyDoses.filter((dose) => dateUtils.isToday(dose.datetime));
       case "week":
-        return doses.filter((dose) => dateUtils.isWeek(dose.datetime));
+        return historyDoses.filter((dose) => dateUtils.isWeek(dose.datetime));
       case "month":
-        return doses.filter((dose) => dateUtils.isMonth(dose.datetime));
+        return historyDoses.filter((dose) => dateUtils.isMonth(dose.datetime));
       default:
-        return doses;
+        return historyDoses;
     }
-  }, [value, doses]);
+  }, [value, doses, historyDoses]);
 
   return (
     <DefaultScreen>
