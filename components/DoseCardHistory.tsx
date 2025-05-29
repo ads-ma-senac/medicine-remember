@@ -7,7 +7,39 @@ import { ReminderImage } from "@/components/ReminderImage";
 import { useReminders } from "@/hooks/useReminders";
 import { dateUtils } from "@/lib/dateUtils";
 import { Dose } from "@/types/Dose";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+
+
+function DoseTakenBadge({ taken }: { taken: boolean }) {
+
+  const theme = useTheme();
+  const message = taken ? "Tomou" : "Esqueceu"
+  const icon = taken ? "check-circle" : "close-circle";
+  const colorCheck = !theme.dark ? "#05df72" : "#4caf50";
+  const colorClose = !theme.dark ? "#ff1744" : "#f44336";
+  const color = taken ? colorCheck : colorClose;
+
+  return (
+    <View
+      style={{
+        backgroundColor: color,
+        borderRadius: 8,
+        paddingRight: 6,
+        paddingLeft: 6,
+        paddingTop: 2,
+        paddingBottom: 2,
+        flexDirection: "row",
+        gap: 4
+      }}
+    >
+      <MaterialCommunityIcons name={icon} size={20} color={"#fff"} />
+      <Text style={{ color: "#fff", fontSize: 12 }}>
+        {message}
+      </Text>
+    </View>
+  );
+}
 
 export default function DoseCardHistory({ dose }: { dose: Dose }) {
   const theme = useTheme();
@@ -31,34 +63,25 @@ export default function DoseCardHistory({ dose }: { dose: Dose }) {
   if (!reminder) return null;
 
   return (
-    <View
-      style={[
-        styles.cardContainer,
-        { backgroundColor: theme.colors.primaryContainer },
-      ]}
-    >
-      <View style={styles.cardDetailsContainer}>
-        <View style={styles.row}>
-          <ReminderImage width={46} height={46} source={imageSource} />
-          <View style={styles.column}>
-            <Text
-              style={[
-                styles.text,
-                { color: theme.colors.onSurface, fontWeight: "bold" },
-              ]}
-            >
-              {reminder.name}
-            </Text>
-            <Text style={[styles.text, { color: theme.colors.onSurface }]}>
-              {dateUtils.formatDateTime(dose.datetime)}
-            </Text>
-          </View>
-        </View>
-        <View>
+    <View style={[styles.cardContainer, { backgroundColor: theme.colors.primaryContainer }]}>
+      <View style={styles.row}>
+        <ReminderImage width={46} height={46} source={imageSource} />
+        <View style={styles.column}>
+          <Text
+            style={[
+              styles.text,
+              { color: theme.colors.onSurface, fontWeight: "bold" },
+            ]}
+          >
+            {reminder.name}
+          </Text>
           <Text style={[styles.text, { color: theme.colors.onSurface }]}>
-            {dose.taken ? "Tomado" : "Não tomado"}
+            {dateUtils.formatDateTime(dose.datetime)}
           </Text>
         </View>
+      </View>
+      <View>
+        <DoseTakenBadge taken={dose.taken} />
       </View>
     </View>
   );
@@ -66,16 +89,14 @@ export default function DoseCardHistory({ dose }: { dose: Dose }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    padding: 8,
     borderRadius: 8,
     flexDirection: "row",
-    gap: 16,
-  },
-  cardDetailsContainer: {
     flex: 1,
-    flexDirection: "row",
+    paddingRight: 8,
+    paddingLeft: 8,
+    paddingTop: 12,
+    paddingBottom: 12,
     justifyContent: "space-between",
-    padding: 16,
   },
   text: {
     fontSize: 16,

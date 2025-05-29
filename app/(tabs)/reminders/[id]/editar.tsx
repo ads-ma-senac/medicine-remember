@@ -85,7 +85,7 @@ export default function EditReminder() {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
-            <Text style={styles.title}>Novo medicamento</Text>
+            <Text style={styles.title}>Atualizar medicamento</Text>
             <View style={styles.formContainer}>
               <FormField label="Nome" value={name} onChangeText={setName} />
               <FormPicker

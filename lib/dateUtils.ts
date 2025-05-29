@@ -36,6 +36,10 @@ export const dateUtils = {
         return dayjs(date).format("DD/MM/YYYY [às] HH:mm");
     },
 
+    formatDateLong(date: string | Date): string {
+        return dayjs(date).format("DD [de] MMMM [,] YYYY");
+    },
+
     // "há 5 minutos", "em 2 dias"
     formatDistance(date: string | Date): string {
         return dayjs(date).fromNow();
@@ -91,4 +95,8 @@ export const dateUtils = {
     toISO(date: string | Date): string {
         return dayjs(date).toISOString();
     },
+
+    getTodayformatDate() {
+        return this.formatDateLong(dayjs().toDate())
+    }
 };

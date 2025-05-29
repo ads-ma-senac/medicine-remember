@@ -44,6 +44,7 @@ export default function NumericInputField({
         mode="outlined"
         outlineColor="transparent"
         onChangeText={handleChange}
+        keyboardType="numeric"
         style={[
           styles.input,
           { backgroundColor: theme.colors.primaryContainer },

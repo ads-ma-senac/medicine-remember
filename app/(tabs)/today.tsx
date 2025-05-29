@@ -5,7 +5,9 @@ import { DefaultScreen } from "@/components/DefaultScreen";
 import DoseCard from "@/components/DoseCard";
 import { EmptyState } from "@/components/EmptyState";
 import { useDoses } from "@/hooks/useDoses";
+import { dateUtils } from "@/lib/dateUtils";
 import { Dose } from "@/types/Dose";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { ConfettiMethods, PIConfetti } from 'react-native-fast-confetti';
 
@@ -13,14 +15,14 @@ export default function Reminders() {
     const theme = useTheme();
     const ConfettiRef = useRef<ConfettiMethods>(null);
 
-    const { getVisibleDosesWithinNext24Hours, markAllDosesAsTaken, markDoseAsTaken, doses } = useDoses();
+    const { getVisibleDosesToday, markAllDosesAsTaken, markDoseAsTaken, doses } = useDoses();
 
     const [visibleDosesPending, setVisibleDosesPending] = useState<Dose[]>([]);
 
     useEffect(() => {
         const fetchDoses = async () => {
-            const visibleDoses = getVisibleDosesWithinNext24Hours();
-            setVisibleDosesPending(visibleDoses);
+            const visibleDosesToday = getVisibleDosesToday();
+            setVisibleDosesPending(visibleDosesToday);
         };
         fetchDoses();
     }, [doses]);
@@ -42,7 +44,17 @@ export default function Reminders() {
         <DefaultScreen>
             <View style={styles.container}>
                 <PIConfetti ref={ConfettiRef} autoplay={false} fadeOutOnEnd count={300} />
-                <Text style={styles.title}>Hoje</Text>
+                <View>
+                    <Text style={styles.title}>Hoje</Text>
+                    <Text style={{ fontSize: 18 }}>{dateUtils.getTodayformatDate()}</Text>
+                </View>
+                <View style={[styles.cardInfo, { borderColor: theme.colors.onSurface }]}>
+                    <MaterialCommunityIcons name={"alert-circle-outline"} size={20} color={"#fff"} />
+                    <View style={{ flexDirection: "column" }}>
+                        <Text>Dica:</Text>
+                        <Text>Pressione e segure um medicamento por 1 segundo para marcá-lo como tomado.</Text>
+                    </View>
+                </View>
                 <TouchableOpacity
                     onPress={handleConfirmAll}
                     disabled={disabledButton}
@@ -70,7 +82,7 @@ export default function Reminders() {
                     )
                 }
             </View>
-        </DefaultScreen>
+        </DefaultScreen >
     );
 }
 
@@ -96,5 +108,13 @@ const styles = StyleSheet.create({
     buttonContainer: {
         padding: 16,
         borderRadius: 8
+    },
+    cardInfo: {
+        flexDirection: "row",
+        gap: 8,
+        borderWidth: 2,
+        borderStyle: "solid",
+        borderRadius: 8,
+        padding: 12
     }
 });
